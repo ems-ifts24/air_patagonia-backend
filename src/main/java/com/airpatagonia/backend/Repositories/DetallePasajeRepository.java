@@ -5,11 +5,10 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.airpatagonia.backend.models.Avion;
+import com.airpatagonia.backend.models.DetallePasaje;
 
 @Repository
-public interface AvionRepository extends JpaRepository<Avion, Long> {
+public interface DetallePasajeRepository extends JpaRepository<DetallePasaje, Long> {
 
-    public List<Avion> findAll();
-    
+    public List<DetallePasaje> findAll();
 }

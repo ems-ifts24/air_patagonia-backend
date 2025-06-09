@@ -8,6 +8,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.airpatagonia.backend.Services.VueloService;
+import com.airpatagonia.backend.models.PagoDePasaje;
+import com.airpatagonia.backend.Services.PagoDePasajeService;
+import com.airpatagonia.backend.models.DetallePasaje;
+import com.airpatagonia.backend.Services.DetallePasajeService;
 
 @RestController 
 @RequestMapping("/vuelos")
@@ -15,6 +19,12 @@ public class VueloController {
 
     @Autowired
     private VueloService vueloService;
+
+    @Autowired
+    private PagoDePasajeService pagoDePasajeService;
+
+    @Autowired
+    private DetallePasajeService detallePasajeService;
 
     // @GetMapping
     // public List<Vuelo> getAllVuelos() {
@@ -50,5 +60,15 @@ public class VueloController {
     @GetMapping("/estados")
     public List<String> getAllVuelosEstados() {
         return vueloService.getAllVuelosEstados();
+    }
+
+    @GetMapping("/pagos-pasajes")
+    public List<PagoDePasaje> getAllPagosDePasaje() {
+        return pagoDePasajeService.getAllPagosDePasaje();
+    }
+
+    @GetMapping("/detalle-pasajes")
+    public List<DetallePasaje> getAllDetallePasajes() {
+        return detallePasajeService.getAllDetallePasajes();
     }
 }

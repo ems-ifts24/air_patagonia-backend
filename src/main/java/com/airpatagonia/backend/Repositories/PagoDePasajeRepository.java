@@ -1,0 +1,17 @@
+package com.airpatagonia.backend.Repositories;
+
+import org.springframework.stereotype.Repository;
+
+import com.airpatagonia.backend.models.PagoDePasaje;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.List;
+
+@Repository
+public interface PagoDePasajeRepository extends JpaRepository<PagoDePasaje, Long> {
+
+    @Override
+    public List<PagoDePasaje> findAll();
+
+}

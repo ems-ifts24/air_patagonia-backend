@@ -10,5 +10,5 @@ import com.airpatagonia.backend.models.Aeropuerto;
 @Repository
 public interface AeropuertoRepository extends JpaRepository<Aeropuerto, Long> {
     
-    List<Aeropuerto> findAll();
+    public List<Aeropuerto> findAll();
 }
