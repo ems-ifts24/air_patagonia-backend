@@ -20,7 +20,7 @@ abstract class Pasajero {
     protected Long idPasajero;
 
     @ManyToOne
-    @JoinColumn(name = "DetallePasaje")
+    @JoinColumn(name = "IdDetallePasaje")
     protected DetallePasaje detallePasaje;
 
 

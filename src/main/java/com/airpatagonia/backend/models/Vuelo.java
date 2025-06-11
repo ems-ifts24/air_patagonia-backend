@@ -37,32 +37,32 @@ public class Vuelo {
     private Long id;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "estado")
+    @Column(name = "Estado")
     private VueloEstado estado;
 
-    @Column(name = "fecha_partida")
+    @Column(name = "FechaPartida")
     private LocalDateTime fechaPartida;
 
-    @Column(name = "fecha_arribo")
+    @Column(name = "FechaArribo")
     private LocalDateTime fechaArribo;
 
     @ManyToOne
-    @JoinColumn(name = "avion_id")
+    @JoinColumn(name = "IdAvion")
     private Avion avion;
 
     @ManyToOne
-    @JoinColumn(name = "origen_id")
+    @JoinColumn(name = "IdOrigen")
     private Aeropuerto origen;
 
     @ManyToOne
-    @JoinColumn(name = "destino_id")
+    @JoinColumn(name = "IdDestino")
     private Aeropuerto destino;
 
     @ManyToMany
-    @JoinTable(name = "vuelo_tripulante", joinColumns = @JoinColumn(name = "vuelo_id"), inverseJoinColumns = @JoinColumn(name = "tripulante_id"))
+    @JoinTable(name = "VueloTripulante", joinColumns = @JoinColumn(name = "IdVuelo"), inverseJoinColumns = @JoinColumn(name = "IdTripulante"))
     private List<Empleado> tripulantes;
 
     @ManyToMany
-    @JoinTable(name = "vuelo_pasajero", joinColumns = @JoinColumn(name = "vuelo_id"), inverseJoinColumns = @JoinColumn(name = "pasajero_id"))
+    @JoinTable(name = "VueloPasajero", joinColumns = @JoinColumn(name = "IdVuelo"), inverseJoinColumns = @JoinColumn(name = "IdPasajero"))
     private List<Pasajero> pasajeros;
 }
