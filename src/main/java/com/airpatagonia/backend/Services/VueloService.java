@@ -4,6 +4,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +18,8 @@ import com.airpatagonia.backend.models.TripulantePuesto;
 @Service
 public class VueloService {
     
+    private static final Logger logger = LoggerFactory.getLogger(VueloService.class);
+
     @Autowired
     private VueloRepository vueloRepository;
 
@@ -28,6 +32,12 @@ public class VueloService {
 
     public Vuelo getVueloById(Long id) {
         return vueloRepository.findById(id).orElse(null);
+    }
+
+    public List<Vuelo> getVuelosByEstado(VueloEstado estado) {
+        List<Vuelo> vuelos = vueloRepository.findByEstado(estado);
+        logger.info("Se encontraron {} vuelos con estado: {}", vuelos.isEmpty() ? 0 : vuelos.size(), estado);
+        return vuelos;
     }
 
     public Vuelo createVuelo(Vuelo vuelo) {

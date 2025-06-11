@@ -2,6 +2,8 @@ package com.airpatagonia.backend.controllers;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,12 +15,15 @@ import com.airpatagonia.backend.models.PagoDePasaje;
 import com.airpatagonia.backend.models.Vuelo;
 import com.airpatagonia.backend.Services.PagoDePasajeService;
 import com.airpatagonia.backend.models.DetallePasaje;
+import com.airpatagonia.backend.Enums.VueloEstado;
 import com.airpatagonia.backend.Services.DetallePasajeService;
 import com.airpatagonia.backend.models.TripulantePuesto;
 
 @RestController 
 @RequestMapping("/vuelos")
 public class VueloController {
+
+    private static final Logger logger = LoggerFactory.getLogger(VueloController.class);
 
     @Autowired
     private VueloService vueloService;
@@ -39,6 +44,14 @@ public class VueloController {
     public Vuelo getVueloById(@PathVariable Long id) {
         return vueloService.getVueloById(id);
     }
+
+    @GetMapping("/estados/{estado}")
+    public List<Vuelo> getVuelosByEstado(@PathVariable VueloEstado estado) {
+        logger.info("Buscando vuelos por estado: " + estado.name());
+        return vueloService.getVuelosByEstado(estado);
+    }
+
+
 
     // @GetMapping
     // public List<Tripulante> getAllTripulantes() {
