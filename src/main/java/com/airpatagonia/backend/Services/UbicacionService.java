@@ -7,16 +7,17 @@ import org.springframework.stereotype.Service;
 
 import com.airpatagonia.backend.models.Pais;
 import com.airpatagonia.backend.models.Ciudad;
-import com.airpatagonia.backend.Repositories.UbicacionRepository;
+import com.airpatagonia.backend.Repositories.PaisRepository;
+import com.airpatagonia.backend.Repositories.CiudadRepository;
 
 @Service
 public class UbicacionService {
 
     @Autowired
-    private UbicacionRepository.PaisRepository paisRepository;
+    private PaisRepository paisRepository;
 
     @Autowired
-    private UbicacionRepository.CiudadRepository ciudadRepository;
+    private CiudadRepository ciudadRepository;
     
 
     public List<Pais> getPaises() {
