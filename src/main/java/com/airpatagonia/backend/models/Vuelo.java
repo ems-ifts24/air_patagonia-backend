@@ -33,6 +33,7 @@ import lombok.NoArgsConstructor;
 public class Vuelo {
 
     @Id
+    @Column(name = "IdVuelo")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -51,18 +52,18 @@ public class Vuelo {
     private Avion avion;
 
     @ManyToOne
-    @JoinColumn(name = "IdOrigen")
+    @JoinColumn(name = "IdAeropuertoPartida")
     private Aeropuerto origen;
 
     @ManyToOne
-    @JoinColumn(name = "IdDestino")
+    @JoinColumn(name = "IdAeropuertoArribo")
     private Aeropuerto destino;
 
     @ManyToMany
-    @JoinTable(name = "VueloTripulante", joinColumns = @JoinColumn(name = "IdVuelo"), inverseJoinColumns = @JoinColumn(name = "IdTripulante"))
+    @JoinTable(name = "TripulacionVuelo", joinColumns = @JoinColumn(name = "IdVuelo"), inverseJoinColumns = @JoinColumn(name = "IdEmpleado"))
     private List<Empleado> tripulantes;
 
     @ManyToMany
-    @JoinTable(name = "VueloPasajero", joinColumns = @JoinColumn(name = "IdVuelo"), inverseJoinColumns = @JoinColumn(name = "IdPasajero"))
+    @JoinTable(name = "Pasajero", joinColumns = @JoinColumn(name = "IdVuelo"), inverseJoinColumns = @JoinColumn(name = "IdCliente"))
     private List<Pasajero> pasajeros;
 }

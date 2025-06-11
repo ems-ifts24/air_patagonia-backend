@@ -4,14 +4,17 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.airpatagonia.backend.Services.VueloService;
 import com.airpatagonia.backend.models.PagoDePasaje;
+import com.airpatagonia.backend.models.Vuelo;
 import com.airpatagonia.backend.Services.PagoDePasajeService;
 import com.airpatagonia.backend.models.DetallePasaje;
 import com.airpatagonia.backend.Services.DetallePasajeService;
+import com.airpatagonia.backend.models.TripulantePuesto;
 
 @RestController 
 @RequestMapping("/vuelos")
@@ -26,21 +29,22 @@ public class VueloController {
     @Autowired
     private DetallePasajeService detallePasajeService;
 
-    // @GetMapping
-    // public List<Vuelo> getAllVuelos() {
-    //     VueloEstado estado = VueloEstado.PROGRAMADO.getNombre();
-    //     return vueloService.getAllVuelos();
-    // }
+   
+    @GetMapping
+    public List<Vuelo> getAllVuelos() {
+        return vueloService.getAllVuelos();
+    }
 
-        // @GetMapping
+    @GetMapping("/{id}")
+    public Vuelo getVueloById(@PathVariable Long id) {
+        return vueloService.getVueloById(id);
+    }
+
+    // @GetMapping
     // public List<Tripulante> getAllTripulantes() {
     //     return tripulanteService.getAllTripulantes();
     // }
 
-    // @GetMapping("/{id}")
-    // public Tripulante getTripulanteById(@PathVariable Long id) {
-    //     return tripulanteService.getTripulanteById(id);
-    // }
 
     // @PostMapping
     // public Tripulante createTripulante(@RequestBody Tripulante tripulante) {
@@ -70,5 +74,12 @@ public class VueloController {
     @GetMapping("/detalle-pasajes")
     public List<DetallePasaje> getAllDetallePasajes() {
         return detallePasajeService.getAllDetallePasajes();
+    }
+
+    // TRIPULANTES
+    
+    @GetMapping("/tripulantes/puestos")
+    public List<TripulantePuesto> getAllTripulantePuestos() {
+        return vueloService.getAllTripulantePuestos();
     }
 }
