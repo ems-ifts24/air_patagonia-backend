@@ -8,9 +8,15 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.JoinColumn;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
 
 @Entity
 @Table(name = "Ciudad")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Ciudad {
     
     @Id

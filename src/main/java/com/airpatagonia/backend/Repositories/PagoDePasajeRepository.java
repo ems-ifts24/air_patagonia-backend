@@ -11,7 +11,6 @@ import java.util.List;
 @Repository
 public interface PagoDePasajeRepository extends JpaRepository<PagoDePasaje, Long> {
 
-    @Override
     public List<PagoDePasaje> findAll();
 
 }
