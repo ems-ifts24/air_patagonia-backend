@@ -35,7 +35,7 @@ public class Vuelo {
     @Id
     @Column(name = "IdVuelo")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long idVuelo;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "Estado")

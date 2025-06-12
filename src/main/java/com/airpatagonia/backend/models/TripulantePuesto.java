@@ -21,7 +21,7 @@ public class TripulantePuesto {
     @Id
     @Column(name = "IdPuestoTripulante")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idPuesto;
+    private Long idPuestoTripulante;
 
     @Column(name = "Puesto")
     private String puesto;
