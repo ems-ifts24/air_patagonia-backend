@@ -1,5 +1,7 @@
 package com.airpatagonia.backend.Services;
 
+import com.airpatagonia.backend.Exceptions.ResourceAlreadyExistsException;
+import com.airpatagonia.backend.Repositories.EmpleadoRepository;
 import com.airpatagonia.backend.Repositories.TripulacionVueloRepository;
 import com.airpatagonia.backend.Repositories.TripulantePuestoRepository;
 import com.airpatagonia.backend.models.TripulacionVuelo;
@@ -20,6 +22,9 @@ public class TripulacionVueloService {
     @Autowired
     private TripulantePuestoRepository tripulantePuestoRepository;
 
+    @Autowired
+    private EmpleadoRepository empleadoRepository;
+
 
     public List<Empleado> getTripulantesByVueloId(Long idVuelo) {
         return tripulacionVueloRepository.findByVuelo_IdVuelo(idVuelo)
@@ -28,13 +33,18 @@ public class TripulacionVueloService {
             .collect(Collectors.toList());
     }
 
-    public TripulacionVuelo asignarTripulanteAVuelo(TripulacionVuelo asignacion) {
+    public Empleado asignarTripulanteAVuelo(TripulacionVuelo asignacion) {
         if (tripulacionVueloRepository.existsByVuelo_IdVueloAndEmpleado_IdEmpleado(
                 asignacion.getVuelo().getIdVuelo(), 
                 asignacion.getEmpleado().getIdEmpleado())) {
-            throw new IllegalStateException("El empleado ya está asignado a este vuelo");
+            throw new ResourceAlreadyExistsException("El empleado ya está asignado a este vuelo");
         }
-        return tripulacionVueloRepository.save(asignacion);
+
+        // Guardar la asignacion
+        TripulacionVuelo asignacionGuardada = tripulacionVueloRepository.save(asignacion);
+
+        // Devolver la asignacion guardada con sus relaciones completas
+        return empleadoRepository.findById(asignacionGuardada.getEmpleado().getIdEmpleado()).get();
     }
 
     public void eliminarAsignacion(Long idAsignacion) {

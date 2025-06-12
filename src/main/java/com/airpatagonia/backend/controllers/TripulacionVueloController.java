@@ -28,7 +28,7 @@ public class TripulacionVueloController {
     }
 
     @PostMapping
-    public ResponseEntity<TripulacionVuelo> asignarTripulante(@RequestBody TripulacionVuelo asignacion) {
+    public ResponseEntity<Empleado> asignarTripulante(@RequestBody TripulacionVuelo asignacion) {
         logger.info("Asignando tripulante {} al vuelo {}", asignacion.getEmpleado().getNombre(), asignacion.getVuelo().getIdVuelo());
         return ResponseEntity.status(201).body(tripulacionVueloService.asignarTripulanteAVuelo(asignacion));
     }
