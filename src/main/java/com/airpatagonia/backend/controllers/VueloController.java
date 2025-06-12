@@ -5,6 +5,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,7 +18,6 @@ import com.airpatagonia.backend.Services.PagoDePasajeService;
 import com.airpatagonia.backend.models.DetallePasaje;
 import com.airpatagonia.backend.Enums.VueloEstado;
 import com.airpatagonia.backend.Services.DetallePasajeService;
-import com.airpatagonia.backend.models.TripulantePuesto;
 
 @RestController 
 @RequestMapping("/vuelos")
@@ -35,64 +35,46 @@ public class VueloController {
     private DetallePasajeService detallePasajeService;
 
    
+    // GET Vuelos
     @GetMapping
-    public List<Vuelo> getAllVuelos() {
-        return vueloService.getAllVuelos();
+    public ResponseEntity<List<Vuelo>> getAllVuelos() {
+        logger.info("Buscando todos los vuelos");
+        return ResponseEntity.ok(vueloService.getAllVuelos());
     }
 
-    @GetMapping("/{id}")
-    public Vuelo getVueloById(@PathVariable Long id) {
-        return vueloService.getVueloById(id);
+    @GetMapping("/{idVuelo}")
+    public ResponseEntity<Vuelo> getVueloById(@PathVariable Long idVuelo) {
+        logger.info("Buscando vuelo con id: {}", idVuelo);
+        return ResponseEntity.ok(vueloService.getVueloById(idVuelo));
     }
 
-    @GetMapping("/estados/{estado}")
-    public List<Vuelo> getVuelosByEstado(@PathVariable VueloEstado estado) {
+    @GetMapping("/{estado}")
+    public ResponseEntity<List<Vuelo>> getVuelosByEstado(@PathVariable VueloEstado estado) {
         logger.info("Buscando vuelos por estado: " + estado.name());
-        return vueloService.getVuelosByEstado(estado);
+        return ResponseEntity.ok(vueloService.getVuelosByEstado(estado));
     }
 
 
 
-    // @GetMapping
-    // public List<Tripulante> getAllTripulantes() {
-    //     return tripulanteService.getAllTripulantes();
-    // }
+    // -----------------------------
+    // AUXILIARES
+    // -----------------------------
 
-
-    // @PostMapping
-    // public Tripulante createTripulante(@RequestBody Tripulante tripulante) {
-    //     return tripulanteService.createTripulante(tripulante);
-    // }
-
-    // @PutMapping("/{id}")
-    // public Tripulante updateTripulante(@PathVariable Long id, @RequestBody Tripulante tripulante) {
-    //     return tripulanteService.updateTripulante(id, tripulante);
-    // }
-
-    // @DeleteMapping("/{id}")
-    // public void deleteTripulante(@PathVariable Long id) {
-    //     tripulanteService.deleteTripulante(id);
-    // }
-
+    // Estados de los vuelos
     @GetMapping("/estados")
-    public List<String> getAllVuelosEstados() {
-        return vueloService.getAllVuelosEstados();
+    public ResponseEntity<List<String>> getAllVuelosEstados() {
+        return ResponseEntity.ok(vueloService.getAllVuelosEstados());
     }
 
+    // TEST :: Pagos de pasajes
     @GetMapping("/pagos-pasajes")
-    public List<PagoDePasaje> getAllPagosDePasaje() {
-        return pagoDePasajeService.getAllPagosDePasaje();
+    public ResponseEntity<List<PagoDePasaje>> getAllPagosDePasaje() {
+        return ResponseEntity.ok(pagoDePasajeService.getAllPagosDePasaje());
     }
 
+    // TEST :: Detalle de pasajes
     @GetMapping("/detalle-pasajes")
-    public List<DetallePasaje> getAllDetallePasajes() {
-        return detallePasajeService.getAllDetallePasajes();
-    }
-
-    // TRIPULANTES
-    
-    @GetMapping("/tripulantes/puestos")
-    public List<TripulantePuesto> getAllTripulantePuestos() {
-        return vueloService.getAllTripulantePuestos();
+    public ResponseEntity<List<DetallePasaje>> getAllDetallePasajes() {
+        return ResponseEntity.ok(detallePasajeService.getAllDetallePasajes());
     }
 }

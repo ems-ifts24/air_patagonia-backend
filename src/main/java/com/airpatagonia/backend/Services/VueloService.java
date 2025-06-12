@@ -11,9 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.airpatagonia.backend.Enums.VueloEstado;
 import com.airpatagonia.backend.Repositories.VueloRepository;
-import com.airpatagonia.backend.Repositories.TripulantePuestoRepository;
 import com.airpatagonia.backend.models.Vuelo;
-import com.airpatagonia.backend.models.TripulantePuesto;
 
 @Service
 public class VueloService {
@@ -23,9 +21,7 @@ public class VueloService {
     @Autowired
     private VueloRepository vueloRepository;
 
-    @Autowired
-    private TripulantePuestoRepository tripulantePuestoRepository;
-    
+
     public List<Vuelo> getAllVuelos() {
         return vueloRepository.findAll();
     }
@@ -40,33 +36,25 @@ public class VueloService {
         return vuelos;
     }
 
-    public Vuelo createVuelo(Vuelo vuelo) {
-        return vueloRepository.save(vuelo);
-    }
+    // public Vuelo createVuelo(Vuelo vuelo) {
+    //     return vueloRepository.save(vuelo);
+    // }
 
-    public Vuelo updateVuelo(Long id, Vuelo vuelo) {
-        Vuelo vueloToUpdate = getVueloById(id);
-        vueloToUpdate.setFechaPartida(vuelo.getFechaPartida());
-        vueloToUpdate.setFechaArribo(vuelo.getFechaArribo());
-        vueloToUpdate.setEstado(vuelo.getEstado());
-        return vueloRepository.save(vueloToUpdate);
-    }
+    // public Vuelo updateVuelo(Long id, Vuelo vuelo) {
+    //     Vuelo vueloToUpdate = getVueloById(id);
+    //     vueloToUpdate.setFechaPartida(vuelo.getFechaPartida());
+    //     vueloToUpdate.setFechaArribo(vuelo.getFechaArribo());
+    //     vueloToUpdate.setEstado(vuelo.getEstado());
+    //     return vueloRepository.save(vueloToUpdate);
+    // }
 
-    public void deleteVuelo(Long id) {
-        vueloRepository.deleteById(id);
-    }
+    // public void deleteVuelo(Long id) {
+    //     vueloRepository.deleteById(id);
+    // }
 
     public List<String> getAllVuelosEstados() {
         return Arrays.stream(VueloEstado.values())
                 .map(VueloEstado::getDescripcion)
                 .collect(Collectors.toList());
-    }
-
-
-
-    // TRIPULANTES
-
-    public List<TripulantePuesto> getAllTripulantePuestos() {
-        return tripulantePuestoRepository.findAll();
     }
 }
