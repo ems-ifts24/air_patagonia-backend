@@ -57,7 +57,7 @@ public class VueloController {
         return ResponseEntity.status(200).body(vuelo);
     }
 
-    @GetMapping("/{estado}")
+    @GetMapping("/estado/{estado}")
     @Operation(summary = "Obtener vuelos por estado")
     public ResponseEntity<List<Vuelo>> getVuelosByEstado(@PathVariable VueloEstado estado) {
         logger.info("Buscando vuelos por estado: " + estado.name());
