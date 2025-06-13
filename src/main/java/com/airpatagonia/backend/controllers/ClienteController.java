@@ -5,7 +5,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 
 import com.airpatagonia.backend.Services.ClienteService;
 import com.airpatagonia.backend.models.Cliente;
@@ -18,12 +20,18 @@ public class ClienteController {
     private ClienteService clienteService;
     
     @GetMapping
-    public List<Cliente> getAllClientes() {
-        return clienteService.getAllClientes();
+    public ResponseEntity<List<Cliente>> getAllClientes() {
+        List<Cliente> clientes = clienteService.getAllClientes();
+        return ResponseEntity.status(200).body(clientes);
     }
 
     @GetMapping("/{id}")
-    public Cliente getClienteById(@PathVariable Long id) {
-        return clienteService.getClienteById(id);
+    public ResponseEntity<Cliente> getClienteById(@PathVariable Long id) {
+        Cliente cliente = clienteService.getClienteById(id);
+        if (cliente != null) {
+            return ResponseEntity.status(200).body(cliente);
+        } else {
+            return ResponseEntity.status(404).build();
+        }
     }
 }

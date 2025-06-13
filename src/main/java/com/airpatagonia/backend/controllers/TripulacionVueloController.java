@@ -24,13 +24,15 @@ public class TripulacionVueloController {
     @GetMapping("/{idVuelo}/tripulantes")
     public ResponseEntity<List<Empleado>> getTripulantesVuelo(@PathVariable Long idVuelo) {
         logger.info("Buscando tripulantes para el vuelo con id: {}", idVuelo);
-        return ResponseEntity.status(200).body(tripulacionVueloService.getTripulantesByVueloId(idVuelo));
+        List<Empleado> tripulantes = tripulacionVueloService.getTripulantesByVueloId(idVuelo);
+        return ResponseEntity.status(200).body(tripulantes);
     }
 
     @PostMapping
     public ResponseEntity<Empleado> asignarTripulante(@RequestBody TripulacionVuelo asignacion) {
-        logger.info("Asignando tripulante {} al vuelo {}", asignacion.getEmpleado().getNombre(), asignacion.getVuelo().getIdVuelo());
-        return ResponseEntity.status(201).body(tripulacionVueloService.asignarTripulanteAVuelo(asignacion));
+        logger.info("Asignando tripulante al vuelo {}", asignacion.getVuelo().getIdVuelo());
+        Empleado empleadoAsignado = tripulacionVueloService.asignarTripulanteAVuelo(asignacion);
+        return ResponseEntity.status(201).body(empleadoAsignado);
     }
 
     @DeleteMapping("/{idAsignacion}")
@@ -40,13 +42,11 @@ public class TripulacionVueloController {
         return ResponseEntity.status(204).body("Asignacion eliminada exitosamente");
     }
 
-
-
     // TRIPULANTES PUESTOS
     @GetMapping("/puestos")
     public ResponseEntity<List<TripulantePuesto>> getAllTripulantePuestos() {
-        logger.info("Buscando todos los puestos");
-        return ResponseEntity.ok(tripulacionVueloService.getAllTripulantePuestos());
+        logger.info("Obteniendo todos los puestos de tripulación");
+        List<TripulantePuesto> puestos = tripulacionVueloService.getAllTripulantePuestos();
+        return ResponseEntity.status(200).body(puestos);
     }
-
 }

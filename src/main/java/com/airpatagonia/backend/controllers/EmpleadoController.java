@@ -1,6 +1,7 @@
 package com.airpatagonia.backend.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,12 +20,18 @@ public class EmpleadoController {
     private EmpleadoService empleadoService;
     
     @GetMapping
-    public List<Empleado> getAllEmpleados() {
-        return empleadoService.getAllEmpleados();
+    public ResponseEntity<List<Empleado>> getAllEmpleados() {
+        List<Empleado> empleados = empleadoService.getAllEmpleados();
+        return ResponseEntity.status(200).body(empleados);
     }
     
     @GetMapping("/{id}")
-    public Empleado getEmpleadoById(@PathVariable Long id) {
-        return empleadoService.getEmpleadoById(id);
+    public ResponseEntity<Empleado> getEmpleadoById(@PathVariable Long id) {
+        Empleado empleado = empleadoService.getEmpleadoById(id);
+        if (empleado != null) {
+            return ResponseEntity.status(200).body(empleado);
+        } else {
+            return ResponseEntity.status(404).build();
+        }
     }
 }
