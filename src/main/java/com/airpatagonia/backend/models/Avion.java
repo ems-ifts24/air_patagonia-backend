@@ -1,12 +1,13 @@
 package com.airpatagonia.backend.models;
 
-import com.airpatagonia.backend.Enums.AvionEstado;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+
+import com.airpatagonia.backend.enums.AvionEstado;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.EnumType;

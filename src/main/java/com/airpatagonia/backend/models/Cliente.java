@@ -1,6 +1,6 @@
 package com.airpatagonia.backend.models;
 
-import com.airpatagonia.backend.Enums.ClienteEstado;
+import com.airpatagonia.backend.enums.ClienteEstado;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

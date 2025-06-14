@@ -1,4 +1,4 @@
-package com.airpatagonia.backend.Repositories;
+package com.airpatagonia.backend.repositories;
 
 import org.springframework.stereotype.Repository;
 

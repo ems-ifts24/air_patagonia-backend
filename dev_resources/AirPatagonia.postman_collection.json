@@ -1,0 +1,513 @@
+{
+	"info": {
+		"_postman_id": "11364bb8-5734-4932-9ea0-f6924c31ca2e",
+		"name": "AirPatagonia",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "21826418"
+	},
+	"item": [
+		{
+			"name": "Mockoon",
+			"item": [
+				{
+					"name": "Login Mockoon",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"usuario\": \"pepe\",\r\n    \"password\": \"pepe\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3003/airpatagonia-rest/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3003",
+							"path": [
+								"airpatagonia-rest",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "PostmanMock",
+			"item": [
+				{
+					"name": "Login Postman",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"usuario\": \"jperez\",\r\n    \"password\": \"jperez123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://35f3fd78-ba04-4351-9e01-cb2030ed72bc.mock.pstmn.io",
+							"protocol": "https",
+							"host": [
+								"35f3fd78-ba04-4351-9e01-cb2030ed72bc",
+								"mock",
+								"pstmn",
+								"io"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "SinBody",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://35f3fd78-ba04-4351-9e01-cb2030ed72bc.mock.pstmn.io",
+									"protocol": "https",
+									"host": [
+										"35f3fd78-ba04-4351-9e01-cb2030ed72bc",
+										"mock",
+										"pstmn",
+										"io"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": "{\r\n  \"error\": \"Solicitud inválida\",\r\n  \"mensaje\": \"El cuerpo debe incluir 'usuario' y 'password'.\"\r\n}"
+						},
+						{
+							"name": "operador mconti",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"usuario\": \"mconti\",\r\n    \"password\": \"mconti123\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://35f3fd78-ba04-4351-9e01-cb2030ed72bc.mock.pstmn.io",
+									"protocol": "https",
+									"host": [
+										"35f3fd78-ba04-4351-9e01-cb2030ed72bc",
+										"mock",
+										"pstmn",
+										"io"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": "[\r\n  \"user_name\": \"mconti\",\r\n  \"icon\": \"account_circle\",\r\n  \"token\": \"456qwe789rty\"\r\n]"
+						},
+						{
+							"name": "admin jperez",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"usuario\": \"jperez\",\r\n    \"password\": \"jperez123\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://35f3fd78-ba04-4351-9e01-cb2030ed72bc.mock.pstmn.io",
+									"protocol": "https",
+									"host": [
+										"35f3fd78-ba04-4351-9e01-cb2030ed72bc",
+										"mock",
+										"pstmn",
+										"io"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": "{\r\n  \"user_name\": \"jperez\",\r\n  \"icon\": \"admin_panel_settings\",\r\n  \"token\": \"123asd456fgh\"\r\n}"
+						},
+						{
+							"name": "No autorizado pepe",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"usuario\": \"pepe\",\r\n    \"password\": \"pepe\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://35f3fd78-ba04-4351-9e01-cb2030ed72bc.mock.pstmn.io",
+									"protocol": "https",
+									"host": [
+										"35f3fd78-ba04-4351-9e01-cb2030ed72bc",
+										"mock",
+										"pstmn",
+										"io"
+									]
+								}
+							},
+							"status": "Forbidden",
+							"code": 403,
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": "{\r\n  \"error\": \"Acceso denegado\",\r\n  \"mensaje\": \"El usuario no tiene permisos para ingresar al sistema.\"\r\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "API-REST",
+			"item": [
+				{
+					"name": "Tripulantes",
+					"item": [
+						{
+							"name": "Tripulantes Puestos",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{API-localhost}}/tripulacion-vuelo/puestos",
+									"host": [
+										"{{API-localhost}}"
+									],
+									"path": [
+										"tripulacion-vuelo",
+										"puestos"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "TripulancionVuelo x IdVuelo",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{API-localhost}}/tripulacion-vuelo/2/tripulantes",
+									"host": [
+										"{{API-localhost}}"
+									],
+									"path": [
+										"tripulacion-vuelo",
+										"2",
+										"tripulantes"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Asignar Tripulante",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"vuelo\": {\r\n    \"idVuelo\": 2\r\n  },\r\n  \"empleado\": {\r\n    \"idEmpleado\": 3\r\n  },\r\n  \"puesto\": {\r\n    \"idPuestoTripulante\": 3\r\n  }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{API-localhost}}/tripulacion-vuelo",
+									"host": [
+										"{{API-localhost}}"
+									],
+									"path": [
+										"tripulacion-vuelo"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Vuelos Estados",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{API-localhost}}/vuelos/estados",
+							"host": [
+								"{{API-localhost}}"
+							],
+							"path": [
+								"vuelos",
+								"estados"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Aviones",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{API-localhost}}/aviones",
+							"host": [
+								"{{API-localhost}}"
+							],
+							"path": [
+								"aviones"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Aeropuertos",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{API-localhost}}/aeropuertos",
+							"host": [
+								"{{API-localhost}}"
+							],
+							"path": [
+								"aeropuertos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Pagos Pasajes",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{API-localhost}}/vuelos/pagos-pasajes",
+							"host": [
+								"{{API-localhost}}"
+							],
+							"path": [
+								"vuelos",
+								"pagos-pasajes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Detalle Pasajes",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{API-localhost}}/vuelos/detalle-pasajes",
+							"host": [
+								"{{API-localhost}}"
+							],
+							"path": [
+								"vuelos",
+								"detalle-pasajes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Status",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{API-localhost}}/info-general/status",
+							"host": [
+								"{{API-localhost}}"
+							],
+							"path": [
+								"info-general",
+								"status"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Paises",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{API-localhost}}/info-general/paises",
+							"host": [
+								"{{API-localhost}}"
+							],
+							"path": [
+								"info-general",
+								"paises"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Ciudades",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{API-localhost}}/info-general/ciudades",
+							"host": [
+								"{{API-localhost}}"
+							],
+							"path": [
+								"info-general",
+								"ciudades"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Empleados",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{API-localhost}}/empleados",
+							"host": [
+								"{{API-localhost}}"
+							],
+							"path": [
+								"empleados"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Clientes",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{API-localhost}}/clientes",
+							"host": [
+								"{{API-localhost}}"
+							],
+							"path": [
+								"clientes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Vuelos",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{API-localhost}}/vuelos",
+							"host": [
+								"{{API-localhost}}"
+							],
+							"path": [
+								"vuelos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Vuelo x ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{API-localhost}}/vuelos/10",
+							"host": [
+								"{{API-localhost}}"
+							],
+							"path": [
+								"vuelos",
+								"10"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Vuelo x ESTADO",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{API-localhost}}/vuelos/PROGRAMADO",
+							"host": [
+								"{{API-localhost}}"
+							],
+							"path": [
+								"vuelos",
+								"PROGRAMADO"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
