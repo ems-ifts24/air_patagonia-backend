@@ -57,4 +57,9 @@ public class TripulacionVueloService {
     public List<TripulantePuesto> getAllTripulantePuestos() {
         return tripulantePuestoRepository.findAll();
     }
+
+    // Elimino la tripulacion del vuelo
+    public void deleteTripulacionVueloByVueloId(Long idVuelo) {
+        tripulacionVueloRepository.deleteAllByVuelo_IdVuelo(idVuelo);
+    }
 }
