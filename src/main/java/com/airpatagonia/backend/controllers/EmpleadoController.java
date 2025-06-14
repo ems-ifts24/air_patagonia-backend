@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 import com.airpatagonia.backend.models.Empleado;
-import com.airpatagonia.backend.Services.EmpleadoService;
+import com.airpatagonia.backend.services.EmpleadoService;
 
 @RestController
 @RequestMapping("/empleados")

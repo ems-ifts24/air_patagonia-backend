@@ -1,9 +1,10 @@
 package com.airpatagonia.backend.controllers;
 
-import com.airpatagonia.backend.Services.TripulacionVueloService;
+import com.airpatagonia.backend.models.Empleado;
 import com.airpatagonia.backend.models.TripulacionVuelo;
 import com.airpatagonia.backend.models.TripulantePuesto;
-import com.airpatagonia.backend.models.Empleado;
+import com.airpatagonia.backend.services.TripulacionVueloService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

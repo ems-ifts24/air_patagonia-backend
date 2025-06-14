@@ -1,4 +1,4 @@
-package com.airpatagonia.backend.Enums;
+package com.airpatagonia.backend.enums;
 
 public enum VueloEstado {
     PROGRAMADO("Programado"),

@@ -7,7 +7,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.airpatagonia.backend.Exceptions.ResourceAlreadyExistsException;
+import com.airpatagonia.backend.exceptions.ResourceAlreadyExistsException;
+import com.airpatagonia.backend.exceptions.ResourceNotFoundException;
 import com.airpatagonia.backend.models.ErrorResponse;
 
 @RestControllerAdvice
@@ -25,5 +26,17 @@ public class CustomExceptionController {
             409,
             "ResourceAlreadyExistsException");
         return ResponseEntity.status(409).body(errorResponse);
+    }
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleResourceNotFoundException(ResourceNotFoundException ex) {
+
+        logger.error("Error: {}",ex.getMessage(), ex);
+
+        ErrorResponse errorResponse = new ErrorResponse(
+            ex.getMessage(),
+            404,
+            "ResourceNotFoundException");
+        return ResponseEntity.status(404).body(errorResponse);
     }
 }

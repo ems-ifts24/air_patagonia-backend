@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.airpatagonia.backend.models.Avion;
-import com.airpatagonia.backend.Services.AvionService;
+import com.airpatagonia.backend.services.AvionService;
 
 @RestController
 @RequestMapping("/aviones")

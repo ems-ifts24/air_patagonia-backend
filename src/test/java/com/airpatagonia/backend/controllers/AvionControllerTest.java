@@ -1,7 +1,9 @@
 package com.airpatagonia.backend.controllers;
 
+import com.airpatagonia.backend.controllers.AvionController;
 import com.airpatagonia.backend.models.Avion;
-import com.airpatagonia.backend.Services.AvionService;
+import com.airpatagonia.backend.services.AvionService;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;

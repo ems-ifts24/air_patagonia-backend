@@ -1,4 +1,4 @@
-package com.airpatagonia.backend.Enums;
+package com.airpatagonia.backend.enums;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 

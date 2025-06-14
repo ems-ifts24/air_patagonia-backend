@@ -1,12 +1,13 @@
-package com.airpatagonia.backend.Services;
+package com.airpatagonia.backend.services;
 
-import com.airpatagonia.backend.Exceptions.ResourceAlreadyExistsException;
-import com.airpatagonia.backend.Repositories.EmpleadoRepository;
-import com.airpatagonia.backend.Repositories.TripulacionVueloRepository;
-import com.airpatagonia.backend.Repositories.TripulantePuestoRepository;
+import com.airpatagonia.backend.exceptions.ResourceAlreadyExistsException;
+import com.airpatagonia.backend.models.Empleado;
 import com.airpatagonia.backend.models.TripulacionVuelo;
 import com.airpatagonia.backend.models.TripulantePuesto;
-import com.airpatagonia.backend.models.Empleado;
+import com.airpatagonia.backend.repositories.EmpleadoRepository;
+import com.airpatagonia.backend.repositories.TripulacionVueloRepository;
+import com.airpatagonia.backend.repositories.TripulantePuestoRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

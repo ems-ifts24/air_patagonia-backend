@@ -1,12 +1,14 @@
 package com.airpatagonia.backend.controllers;
 
-import com.airpatagonia.backend.Enums.VueloEstado;
-import com.airpatagonia.backend.Services.DetallePasajeService;
-import com.airpatagonia.backend.Services.PagoDePasajeService;
-import com.airpatagonia.backend.Services.VueloService;
+import com.airpatagonia.backend.controllers.VueloController;
+import com.airpatagonia.backend.enums.VueloEstado;
 import com.airpatagonia.backend.models.DetallePasaje;
 import com.airpatagonia.backend.models.PagoDePasaje;
 import com.airpatagonia.backend.models.Vuelo;
+import com.airpatagonia.backend.services.DetallePasajeService;
+import com.airpatagonia.backend.services.PagoDePasajeService;
+import com.airpatagonia.backend.services.VueloService;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;

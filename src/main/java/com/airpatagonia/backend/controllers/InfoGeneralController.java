@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-import com.airpatagonia.backend.Services.UbicacionService;
 import com.airpatagonia.backend.models.Pais;
 import com.airpatagonia.backend.models.Ciudad;
+import com.airpatagonia.backend.services.UbicacionService;
 
 @RestController
 @RequestMapping("/info-general")

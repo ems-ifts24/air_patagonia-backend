@@ -1,4 +1,4 @@
-package com.airpatagonia.backend.Exceptions;
+package com.airpatagonia.backend.exceptions;
 
 public class ResourceAlreadyExistsException extends RuntimeException {
 

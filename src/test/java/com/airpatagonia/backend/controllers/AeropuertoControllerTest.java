@@ -1,7 +1,9 @@
 package com.airpatagonia.backend.controllers;
 
+import com.airpatagonia.backend.controllers.AeropuertoController;
 import com.airpatagonia.backend.models.Aeropuerto;
-import com.airpatagonia.backend.Services.AeropuertoService;
+import com.airpatagonia.backend.services.AeropuertoService;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;

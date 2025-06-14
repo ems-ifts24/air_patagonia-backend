@@ -1,5 +1,7 @@
 package com.airpatagonia.backend.models;
 
+import com.airpatagonia.backend.enums.AerpuertoEstado;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -11,8 +13,6 @@ import jakarta.persistence.EnumType;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
-
-import com.airpatagonia.backend.Enums.AerpuertoEstado;
 
 @Entity
 @Table(name = "Aeropuerto")

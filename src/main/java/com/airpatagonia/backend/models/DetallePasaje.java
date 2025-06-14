@@ -16,9 +16,9 @@ import lombok.AllArgsConstructor;
 
 import java.time.LocalDateTime;
 
-import com.airpatagonia.backend.Enums.PagoEstado;
-import com.airpatagonia.backend.Enums.PasajeroCategoria;
-import com.airpatagonia.backend.Enums.PasajeEstado;
+import com.airpatagonia.backend.enums.PagoEstado;
+import com.airpatagonia.backend.enums.PasajeEstado;
+import com.airpatagonia.backend.enums.PasajeroCategoria;
 
 import java.math.BigDecimal;
 

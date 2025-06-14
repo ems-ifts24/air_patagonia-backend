@@ -1,6 +1,6 @@
 package com.airpatagonia.backend.models;
 
-import com.airpatagonia.backend.Enums.VueloEstado;
+import com.airpatagonia.backend.enums.VueloEstado;
 import com.airpatagonia.backend.models.Aeropuerto;
 import com.airpatagonia.backend.models.Avion;
 import com.airpatagonia.backend.models.Empleado;
@@ -53,11 +53,11 @@ public class Vuelo {
 
     @ManyToOne
     @JoinColumn(name = "IdAeropuertoPartida")
-    private Aeropuerto origen;
+    private Aeropuerto aeropuertoPartida;
 
     @ManyToOne
     @JoinColumn(name = "IdAeropuertoArribo")
-    private Aeropuerto destino;
+    private Aeropuerto aeropuertoArribo;
 
     @ManyToMany
     @JoinTable(name = "TripulacionVuelo", joinColumns = @JoinColumn(name = "IdVuelo"), inverseJoinColumns = @JoinColumn(name = "IdEmpleado"))

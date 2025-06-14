@@ -9,8 +9,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 
-import com.airpatagonia.backend.Services.ClienteService;
 import com.airpatagonia.backend.models.Cliente;
+import com.airpatagonia.backend.services.ClienteService;
 
 @RestController
 @RequestMapping("/clientes")

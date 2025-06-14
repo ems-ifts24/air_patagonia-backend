@@ -8,7 +8,7 @@ import jakarta.persistence.Table;
 
 import java.time.LocalDateTime;
 
-import com.airpatagonia.backend.Enums.PagoTipo;
+import com.airpatagonia.backend.enums.PagoTipo;
 
 import java.math.BigDecimal;
 

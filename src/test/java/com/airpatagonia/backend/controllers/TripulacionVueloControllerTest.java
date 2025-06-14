@@ -1,10 +1,11 @@
 package com.airpatagonia.backend.controllers;
 
-import com.airpatagonia.backend.Services.TripulacionVueloService;
+import com.airpatagonia.backend.controllers.TripulacionVueloController;
 import com.airpatagonia.backend.models.Empleado;
 import com.airpatagonia.backend.models.TripulacionVuelo;
 import com.airpatagonia.backend.models.TripulantePuesto;
 import com.airpatagonia.backend.models.Vuelo;
+import com.airpatagonia.backend.services.TripulacionVueloService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

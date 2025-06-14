@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.airpatagonia.backend.models.Aeropuerto;
-import com.airpatagonia.backend.Services.AeropuertoService;
+import com.airpatagonia.backend.services.AeropuertoService;
 
 @RestController
 @RequestMapping("/aeropuertos")

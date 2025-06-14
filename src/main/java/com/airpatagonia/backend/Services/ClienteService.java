@@ -1,4 +1,4 @@
-package com.airpatagonia.backend.Services;
+package com.airpatagonia.backend.services;
 
 import java.util.List;
 
@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.airpatagonia.backend.models.Cliente;
-import com.airpatagonia.backend.Repositories.ClienteRepository;
+import com.airpatagonia.backend.repositories.ClienteRepository;
 
 @Service
 public class ClienteService {

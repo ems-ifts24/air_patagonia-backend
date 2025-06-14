@@ -1,14 +1,14 @@
-package com.airpatagonia.backend.Services;
+package com.airpatagonia.backend.services;
 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.airpatagonia.backend.models.Pais;
 import com.airpatagonia.backend.models.Ciudad;
-import com.airpatagonia.backend.Repositories.PaisRepository;
-import com.airpatagonia.backend.Repositories.CiudadRepository;
+import com.airpatagonia.backend.models.Pais;
+import com.airpatagonia.backend.repositories.CiudadRepository;
+import com.airpatagonia.backend.repositories.PaisRepository;
 
 @Service
 public class UbicacionService {
