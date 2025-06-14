@@ -13,17 +13,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.airpatagonia.backend.models.DetallePasaje;
 import com.airpatagonia.backend.models.PagoDePasaje;
 import com.airpatagonia.backend.models.Vuelo;
 import com.airpatagonia.backend.services.DetallePasajeService;
 import com.airpatagonia.backend.services.PagoDePasajeService;
 import com.airpatagonia.backend.services.VueloService;
 import com.airpatagonia.backend.dtos.VueloDTO;
+import com.airpatagonia.backend.enums.VueloEstado;
 
 import io.swagger.v3.oas.annotations.Operation;
-
-import com.airpatagonia.backend.models.DetallePasaje;
-import com.airpatagonia.backend.enums.VueloEstado;
 
 @RestController 
 @RequestMapping("/vuelos")
