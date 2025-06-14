@@ -8,19 +8,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.airpatagonia.backend.Services.VueloService;
 import com.airpatagonia.backend.models.PagoDePasaje;
 import com.airpatagonia.backend.models.Vuelo;
+import com.airpatagonia.backend.services.DetallePasajeService;
+import com.airpatagonia.backend.services.PagoDePasajeService;
+import com.airpatagonia.backend.services.VueloService;
+import com.airpatagonia.backend.dtos.VueloDTO;
 
 import io.swagger.v3.oas.annotations.Operation;
 
-import com.airpatagonia.backend.Services.PagoDePasajeService;
 import com.airpatagonia.backend.models.DetallePasaje;
-import com.airpatagonia.backend.Enums.VueloEstado;
-import com.airpatagonia.backend.Services.DetallePasajeService;
+import com.airpatagonia.backend.enums.VueloEstado;
 
 @RestController 
 @RequestMapping("/vuelos")
@@ -52,7 +55,7 @@ public class VueloController {
         logger.info("Buscando vuelo con id: {}", idVuelo);
         Vuelo vuelo = vueloService.getVueloById(idVuelo);
         if (vuelo == null) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(404).build();
         }
         return ResponseEntity.status(200).body(vuelo);
     }
@@ -63,11 +66,21 @@ public class VueloController {
         logger.info("Buscando vuelos por estado: " + estado.name());
         List<Vuelo> vuelos = vueloService.getVuelosByEstado(estado);
         if (vuelos.isEmpty()) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(404).build();
         }
         return ResponseEntity.status(200).body(vuelos);
     }
 
+    @PostMapping
+    @Operation(summary = "Crear un nuevo vuelo")
+    public ResponseEntity<Vuelo> createVuelo(@RequestBody VueloDTO vueloDTO) {
+        logger.info("Creando vuelo: {}", vueloDTO);
+        Vuelo vueloCreated = vueloService.createVuelo(vueloDTO);
+        if (vueloCreated == null) {
+            return ResponseEntity.status(422).build();
+        }
+        return ResponseEntity.status(201).body(vueloCreated);
+    }
 
 
     // -----------------------------

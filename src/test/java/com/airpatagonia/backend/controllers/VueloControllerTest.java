@@ -1,6 +1,5 @@
 package com.airpatagonia.backend.controllers;
 
-import com.airpatagonia.backend.controllers.VueloController;
 import com.airpatagonia.backend.enums.VueloEstado;
 import com.airpatagonia.backend.models.DetallePasaje;
 import com.airpatagonia.backend.models.PagoDePasaje;
@@ -23,6 +22,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.hamcrest.Matchers.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -187,5 +187,57 @@ class VueloControllerTest {
 
         verify(detallePasajeService, times(1)).getAllDetallePasajes();
         verifyNoMoreInteractions(detallePasajeService);
+    }
+    
+    @Test
+    void createVuelo_WithValidData_ShouldReturnCreated() throws Exception {
+        // Arrange
+        Vuelo createdVuelo = new Vuelo();
+        createdVuelo.setIdVuelo(1L);
+        createdVuelo.setEstado(VueloEstado.PROGRAMADO);
+        
+        when(vueloService.createVuelo(any())).thenReturn(createdVuelo);
+        
+        // JSON manual con formato ISO-8601 para las fechas
+        String jsonRequest = """
+        {
+            "idVuelo": 1,
+            "estado": "PROGRAMADO",
+            "idAvion": 1,
+            "idAeropuertoPartida": 1,
+            "idAeropuertoArribo": 2,
+            "fechaPartida": "2025-06-15T10:00:00",
+            "fechaArribo": "2025-06-15T12:00:00"
+        }
+        """;
+        
+        // Act & Assert
+        mockMvc.perform(post("/vuelos")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonRequest))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.idVuelo", is(1)))
+                .andExpect(jsonPath("$.estado", is("PROGRAMADO")));
+                
+        verify(vueloService, times(1)).createVuelo(any());
+        verifyNoMoreInteractions(vueloService);
+    }
+    
+    @Test
+    void createVuelo_WithInvalidData_ShouldReturnUnprocessableEntity() throws Exception {
+        // Arrange
+        when(vueloService.createVuelo(any())).thenReturn(null);
+        
+        // JSON con datos inválidos (faltan campos requeridos)
+        String invalidJson = "{}";
+        
+        // Act & Assert
+        mockMvc.perform(post("/vuelos")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(invalidJson))
+                .andExpect(status().isUnprocessableEntity());
+                
+        verify(vueloService, times(1)).createVuelo(any());
+        verifyNoMoreInteractions(vueloService);
     }
 }
