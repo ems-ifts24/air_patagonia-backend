@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import com.airpatagonia.backend.models.Pais;
@@ -21,7 +22,8 @@ public class InfoGeneralController {
 
     @GetMapping("/status")
     public ResponseEntity<String> getStatus() {
-        return ResponseEntity.status(200).body("API AirPatagonia Backend OK");
+        LocalDateTime hoy = LocalDateTime.now();
+        return ResponseEntity.status(200).body(hoy + " - API AirPatagonia Backend OK.");
     }
 
     @GetMapping("/paises")
