@@ -5,9 +5,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 
-import com.airpatagonia.backend.models.Empleado;
-
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

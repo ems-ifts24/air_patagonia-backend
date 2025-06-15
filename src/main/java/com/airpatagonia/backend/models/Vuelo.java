@@ -1,10 +1,6 @@
 package com.airpatagonia.backend.models;
 
 import com.airpatagonia.backend.enums.VueloEstado;
-import com.airpatagonia.backend.models.Aeropuerto;
-import com.airpatagonia.backend.models.Avion;
-import com.airpatagonia.backend.models.Empleado;
-import com.airpatagonia.backend.models.Pasajero;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.persistence.Entity;
