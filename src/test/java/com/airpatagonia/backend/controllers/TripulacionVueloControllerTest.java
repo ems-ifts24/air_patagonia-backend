@@ -101,16 +101,16 @@ class TripulacionVueloControllerTest {
     }
 
     @Test
-    void eliminarAsignacion_ShouldReturnNoContent() throws Exception {
+    void quitarTripulante_ShouldReturnNoContent() throws Exception {
         // Arrange
-        doNothing().when(tripulacionVueloService).eliminarAsignacion(1L);
+        doNothing().when(tripulacionVueloService).quitarTripulante(1L, 1L);
 
         // Act & Assert
-        mockMvc.perform(delete("/tripulacion-vuelo/1")
+        mockMvc.perform(delete("/tripulacion-vuelo/1/1")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent());
 
-        verify(tripulacionVueloService, times(1)).eliminarAsignacion(1L);
+        verify(tripulacionVueloService, times(1)).quitarTripulante(1L, 1L);
         verifyNoMoreInteractions(tripulacionVueloService);
     }
 

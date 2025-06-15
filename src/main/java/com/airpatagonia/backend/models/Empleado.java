@@ -5,6 +5,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
 
 import com.airpatagonia.backend.enums.EmpleadoEstado;
 
@@ -31,8 +32,9 @@ public class Empleado extends Persona {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "Estado")
-    private EmpleadoEstado estadoEmpleado;
+    private EmpleadoEstado estadoEmpleado = EmpleadoEstado.DISPONIBLE;
 
     @Column(name = "Legajo")
+    @NotNull
     private String legajo;
 }

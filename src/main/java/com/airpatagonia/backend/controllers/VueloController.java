@@ -6,9 +6,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -76,10 +78,39 @@ public class VueloController {
         logger.info("Creando vuelo: {}", vueloDTO);
         Vuelo vueloCreated = vueloService.createVuelo(vueloDTO);
         if (vueloCreated == null) {
+            logger.info("Vuelo no creado");
             return ResponseEntity.status(422).build();
         }
+        logger.info("Vuelo creado exitosamente: {}", vueloCreated);
         return ResponseEntity.status(201).body(vueloCreated);
     }
+
+    @PutMapping("/{idVuelo}")
+    @Operation(summary = "Actualizar un vuelo por su ID")
+    public ResponseEntity<Vuelo> updateVuelo(@PathVariable Long idVuelo, @RequestBody VueloDTO vueloDTO) {
+        logger.info("Actualizando vuelo con id: {}", idVuelo);
+        Vuelo vueloUpdated = vueloService.updateVuelo(idVuelo, vueloDTO);
+        if (vueloUpdated == null) {
+            logger.info("Vuelo no encontrado con id: {}", idVuelo);
+            return ResponseEntity.status(404).build();
+        }
+        logger.info("Vuelo actualizado exitosamente: {}", vueloUpdated);
+        return ResponseEntity.status(200).body(vueloUpdated);
+    }
+
+    @DeleteMapping("/{idVuelo}")
+    @Operation(summary = "Eliminar un vuelo por su ID. Liberando a sus tripulantes y colocando a los pasajeros en estado de 'ABIERTO'")
+    public ResponseEntity<Vuelo> deleteVuelo(@PathVariable Long idVuelo) {
+        logger.info("Eliminando vuelo con id: {}", idVuelo);
+        Vuelo vueloDeleted = vueloService.deleteVuelo(idVuelo);
+        if (vueloDeleted == null) {
+            logger.info("Vuelo no encontrado con id: {}", idVuelo);
+            return ResponseEntity.status(404).build();
+        }
+        logger.info("Vuelo eliminado exitosamente: {}", vueloDeleted);
+        return ResponseEntity.status(204).build();
+    }
+
 
 
     // -----------------------------

@@ -30,5 +30,5 @@ public class Cliente extends Persona {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "Estado")
-    private ClienteEstado estadoCliente;
+    private ClienteEstado estadoCliente = ClienteEstado.ACTIVO;
 }

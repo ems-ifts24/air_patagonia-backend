@@ -240,4 +240,84 @@ class VueloControllerTest {
         verify(vueloService, times(1)).createVuelo(any());
         verifyNoMoreInteractions(vueloService);
     }
+    
+    @Test
+    void updateVuelo_WhenVueloExists_ShouldReturnUpdatedVuelo() throws Exception {
+        // Arrange
+        Vuelo updatedVuelo = new Vuelo();
+        updatedVuelo.setIdVuelo(1L);
+        updatedVuelo.setEstado(VueloEstado.DEMORADO);
+        
+        when(vueloService.updateVuelo(eq(1L), any())).thenReturn(updatedVuelo);
+        
+        String requestBody = """
+        {
+            "estado": "DEMORADO"
+        }
+        """;
+        
+        // Act & Assert
+        mockMvc.perform(put("/vuelos/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.idVuelo", is(1)))
+                .andExpect(jsonPath("$.estado", is("DEMORADO")));
+        
+        verify(vueloService, times(1)).updateVuelo(eq(1L), any());
+        verifyNoMoreInteractions(vueloService);
+    }
+    
+    @Test
+    void updateVuelo_WhenVueloNotExists_ShouldReturnNotFound() throws Exception {
+        // Arrange
+        when(vueloService.updateVuelo(eq(999L), any())).thenReturn(null);
+        
+        String requestBody = """
+        {
+            "estado": "DEMORADO"
+        }
+        """;
+        
+        // Act & Assert
+        mockMvc.perform(put("/vuelos/999")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody))
+                .andExpect(status().isNotFound());
+        
+        verify(vueloService, times(1)).updateVuelo(eq(999L), any());
+        verifyNoMoreInteractions(vueloService);
+    }
+    
+    @Test
+    void deleteVuelo_WhenVueloExists_ShouldReturnNoContent() throws Exception {
+        // Arrange
+        Vuelo deletedVuelo = new Vuelo();
+        deletedVuelo.setIdVuelo(1L);
+        deletedVuelo.setEstado(VueloEstado.BAJA_LOGICA);
+        
+        when(vueloService.deleteVuelo(1L)).thenReturn(deletedVuelo);
+        
+        // Act & Assert
+        mockMvc.perform(delete("/vuelos/1")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent());
+        
+        verify(vueloService, times(1)).deleteVuelo(1L);
+        verifyNoMoreInteractions(vueloService);
+    }
+    
+    @Test
+    void deleteVuelo_WhenVueloNotExists_ShouldReturnNotFound() throws Exception {
+        // Arrange
+        when(vueloService.deleteVuelo(999L)).thenReturn(null);
+        
+        // Act & Assert
+        mockMvc.perform(delete("/vuelos/999")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+        
+        verify(vueloService, times(1)).deleteVuelo(999L);
+        verifyNoMoreInteractions(vueloService);
+    }
 }

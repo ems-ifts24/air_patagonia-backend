@@ -4,7 +4,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.apache.coyote.BadRequestException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +19,8 @@ import com.airpatagonia.backend.repositories.AeropuertoRepository;
 import com.airpatagonia.backend.repositories.AvionRepository;
 import com.airpatagonia.backend.repositories.VueloRepository;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class VueloService {
     
@@ -33,6 +34,10 @@ public class VueloService {
 
     @Autowired
     private AeropuertoRepository aeropuertoRepository;
+
+    @Autowired
+    private TripulacionVueloService tripulacionVueloService;
+
 
     public List<Vuelo> getAllVuelos() {
         return vueloRepository.findAll();
@@ -54,16 +59,49 @@ public class VueloService {
                 .collect(Collectors.toList());
     }
 
+    // Crear vuelo
     public Vuelo createVuelo(VueloDTO vueloDTO) {
-        Vuelo vuelo = crearVuelo(vueloDTO);
-        vueloRepository.save(vuelo);
-        
-        logger.info("Vuelo creado exitosamente: {}", vuelo);
-        return vuelo;
+        Vuelo vuelo = completarVuelo(new Vuelo(), vueloDTO);
+        return vueloRepository.save(vuelo);
     }
 
-    private Vuelo crearVuelo(VueloDTO vueloDTO) {
-        Vuelo vuelo = new Vuelo();
+    // Actualizar vuelo
+    public Vuelo updateVuelo(Long idVuelo, VueloDTO vueloDTO) {
+        Vuelo vuelo = getVueloById(idVuelo);
+        if (vuelo == null)
+            throw new ResourceNotFoundException("Vuelo no encontrado con id: " + idVuelo);
+        
+        vuelo = completarVuelo(vuelo, vueloDTO);
+
+        return vueloRepository.save(vuelo);
+    }
+
+    @Transactional
+    public Vuelo deleteVuelo(Long idVuelo) {
+        Vuelo vuelo = getVueloById(idVuelo);
+        if (vuelo == null)
+            throw new ResourceNotFoundException("Vuelo no encontrado con id: " + idVuelo);
+
+        // Baja logica
+        vuelo.setEstado(VueloEstado.BAJA_LOGICA);
+        Vuelo vueloEliminado = vueloRepository.save(vuelo);
+
+        // Elimino la tripulacion del vuelo 
+        tripulacionVueloService.deleteTripulacionVueloByVueloId(idVuelo);
+
+        // Elimino los pasajeros del vuelo
+        // TODO: Cambiar el estado de los pasajeros a 'ABIERTO'
+
+        return vueloEliminado;
+    }
+
+
+
+    // ----------------
+    // Metodos privados
+    // ----------------
+    private Vuelo completarVuelo(Vuelo vuelo, VueloDTO vueloDTO) {
+        logger.info("Creando vuelo con datos del dto: {}", vueloDTO);
         vuelo.setFechaPartida(vueloDTO.getFechaPartida());
         vuelo.setFechaArribo(vueloDTO.getFechaArribo());
         vuelo.setEstado(vueloDTO.getEstado());
@@ -77,13 +115,15 @@ public class VueloService {
 
     private void obtenerAvion(Vuelo vuelo, VueloDTO vueloDTO) {
         if (vueloDTO.getIdAvion() == null)
-            throw new RuntimeException("Se recibe Id de avion nulo al insertar un vuelo.");
-
+        throw new RuntimeException("Se recibe Id de avion nulo al insertar un vuelo.");
+        
+        logger.info("Obteniendo avion con id: {}", vueloDTO.getIdAvion());
         Avion avion = avionRepository.findById(vueloDTO.getIdAvion()).get();
 
         if (avion == null)
             throw new ResourceNotFoundException("Avion no encontrado con id: " + vueloDTO.getIdAvion());
 
+        logger.info("Avion obtenido exitosamente: {}", avion);
         vuelo.setAvion(avion);
     }
 
@@ -93,20 +133,20 @@ public class VueloService {
 
         if (esOrigen && (vueloDTO.getIdAeropuertoPartida() == null))
             throw new RuntimeException("Se recibe Id de aeropuerto de partida nulo al insertar un vuelo.");
-        
         if (!esOrigen && (vueloDTO.getIdAeropuertoArribo() == null))
             throw new RuntimeException("Se recibe Id de aeropuerto de arribo nulo al insertar un vuelo.");
         
         Long aeropuertoId = esOrigen ? vueloDTO.getIdAeropuertoPartida() : vueloDTO.getIdAeropuertoArribo();
-        
         Aeropuerto aeropuerto = aeropuertoRepository.findById(aeropuertoId).get();
 
         if (aeropuerto == null)
             throw new ResourceNotFoundException("Aeropuerto no encontrado con id: " + aeropuertoId);
         
+        logger.info("Aeropuerto {} obtenido exitosamente: {}", aeroPoint, aeropuerto);
         if (esOrigen)
             vuelo.setAeropuertoPartida(aeropuerto);
         else
             vuelo.setAeropuertoArribo(aeropuerto);
     }
+
 }
