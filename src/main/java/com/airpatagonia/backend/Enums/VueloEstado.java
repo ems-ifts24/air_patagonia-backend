@@ -8,7 +8,8 @@ public enum VueloEstado {
     EN_VUELO("En vuelo"),
     FINALIZADO("Finalizado"),
     DEMORADO("Demorado"),
-    CANCELADO("Cancelado");
+    CANCELADO("Cancelado"),
+    BAJA_LOGICA("Baja logica");
 
     private final String descripcion;
 

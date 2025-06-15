@@ -38,6 +38,6 @@ public class Aeropuerto {
     // Agrego enumerated type.STRING para que relaciones el nombre del Enum con el varchar guardado en la base de datos
     @Enumerated(EnumType.STRING)
     @Column(name = "Estado")
-    private AerpuertoEstado estado;
+    private AerpuertoEstado estadoAeropuerto = AerpuertoEstado.OPERATIVO;
 
 }    

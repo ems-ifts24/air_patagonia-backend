@@ -8,6 +8,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.JoinColumn;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
@@ -25,9 +26,11 @@ public class Ciudad {
     private Long idCiudad;
 
     @Column(name = "Nombre")
+    @NotNull
     private String nombre;
 
     @ManyToOne
     @JoinColumn(name = "IdPais")
+    @NotNull
     private Pais pais;
 }

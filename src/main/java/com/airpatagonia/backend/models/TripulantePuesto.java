@@ -1,5 +1,6 @@
 package com.airpatagonia.backend.models;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
@@ -24,6 +25,7 @@ public class TripulantePuesto {
     private Long idPuestoTripulante;
 
     @Column(name = "Puesto")
+    @NotNull
     private String puesto;
 
     @Column(name = "Descripcion")

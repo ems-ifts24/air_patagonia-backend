@@ -5,10 +5,11 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Positive;
 
 import java.time.LocalDateTime;
-
-import com.airpatagonia.backend.enums.PagoTipo;
 
 import java.math.BigDecimal;
 
@@ -29,9 +30,11 @@ public class PagoDePasaje {
     private Long idPago;
 
     @Column(name = "FechaOperacion")
-    private LocalDateTime fechaOperacion;
+    private LocalDateTime fechaOperacion = LocalDateTime.now();
 
     @Column(name = "Monto")
+    @NotNull
+    @Positive
     private BigDecimal monto;
 
     // Efectivo
@@ -43,6 +46,7 @@ public class PagoDePasaje {
     
     // Tarjeta
     @Column(name = "NumeroTarjeta")
+    @Pattern(regexp = "\\d{13,19}", message = "El número debe tener entre 13 y 19 dígitos")
     private String numeroTarjeta;
 
     @Column(name = "TitularTarjeta")
@@ -56,6 +60,7 @@ public class PagoDePasaje {
     private String bancoOrigen;
 
     @Column(name = "CBUOrigen")
+    @Pattern(regexp = "\\d{22}", message = "El CBU debe tener exactamente 22 dígitos") 
     private String cbuOrigen;
 
     @Column(name = "NumeroOperacion")

@@ -6,6 +6,7 @@ import com.airpatagonia.backend.models.Avion;
 import com.airpatagonia.backend.models.Empleado;
 import com.airpatagonia.backend.models.Pasajero;
 
+import jakarta.validation.constraints.NotNull;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -39,24 +40,29 @@ public class Vuelo {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "Estado")
-    private VueloEstado estado;
+    private VueloEstado estado = VueloEstado.PROGRAMADO;
 
     @Column(name = "FechaPartida")
+    @NotNull
     private LocalDateTime fechaPartida;
 
     @Column(name = "FechaArribo")
+    @NotNull
     private LocalDateTime fechaArribo;
 
     @ManyToOne
     @JoinColumn(name = "IdAvion")
+    @NotNull
     private Avion avion;
 
     @ManyToOne
     @JoinColumn(name = "IdAeropuertoPartida")
+    @NotNull
     private Aeropuerto aeropuertoPartida;
 
     @ManyToOne
     @JoinColumn(name = "IdAeropuertoArribo")
+    @NotNull
     private Aeropuerto aeropuertoArribo;
 
     @ManyToMany
