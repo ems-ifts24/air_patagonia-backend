@@ -22,8 +22,7 @@ public class InfoGeneralController {
 
     @GetMapping("/status")
     public ResponseEntity<String> getStatus() {
-        LocalDateTime hoy = LocalDateTime.now();
-        return ResponseEntity.status(200).body(hoy + " - API AirPatagonia Backend OK.");
+        return ResponseEntity.status(200).body("API AirPatagonia Backend OK");
     }
 
     @GetMapping("/paises")
