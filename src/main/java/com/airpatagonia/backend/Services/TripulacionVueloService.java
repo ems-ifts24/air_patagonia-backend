@@ -48,8 +48,8 @@ public class TripulacionVueloService {
         return empleadoRepository.findById(asignacionGuardada.getEmpleado().getIdEmpleado()).get();
     }
 
-    public void eliminarAsignacion(Long idAsignacion) {
-        tripulacionVueloRepository.deleteById(idAsignacion);
+    public void quitarTripulante(Long idVuelo, Long idEmpleado) {
+        tripulacionVueloRepository.deleteTripulacionVueloByVuelo_IdVueloAndEmpleado_IdEmpleado(idVuelo, idEmpleado);
     }
 
 
