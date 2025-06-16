@@ -34,6 +34,10 @@ public class Vuelo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idVuelo;
 
+    @Column(name = "AliasVuelo")
+    @NotNull
+    private String aliasVuelo;
+    
     @Enumerated(EnumType.STRING)
     @Column(name = "Estado")
     private VueloEstado estado = VueloEstado.PROGRAMADO;

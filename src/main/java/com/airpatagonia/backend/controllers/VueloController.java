@@ -44,7 +44,7 @@ public class VueloController {
    
     // GET Vuelos
     @GetMapping
-    @Operation(summary = "Obtener todos los vuelos")
+    @Operation(summary = "Obtener todos los vuelos excepto los eliminados (BAJA_LOGICA)")
     public ResponseEntity<List<Vuelo>> getAllVuelos() {
         logger.info("Buscando todos los vuelos");
         return ResponseEntity.status(200).body(vueloService.getAllVuelos());

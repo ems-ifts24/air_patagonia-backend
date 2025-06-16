@@ -2,7 +2,6 @@ package com.airpatagonia.backend.services;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,11 +39,16 @@ public class VueloService {
 
 
     public List<Vuelo> getAllVuelos() {
-        return vueloRepository.findAll();
+        List<Vuelo> vuelos = vueloRepository.findAll();
+        vuelos.removeIf(vuelo -> vuelo.getEstado().equals(VueloEstado.BAJA_LOGICA));
+        return vuelos;
     }
 
     public Vuelo getVueloById(Long id) {
-        return vueloRepository.findById(id).orElse(null);
+        Vuelo vuelo = vueloRepository.findById(id).orElse(null);
+        if (vuelo == null)
+            throw new ResourceNotFoundException("Vuelo no encontrado con id: " + id);
+        return vuelo;
     }
 
     public List<Vuelo> getVuelosByEstado(VueloEstado estado) {
