@@ -1,7 +1,8 @@
 package com.airpatagonia.backend.enums;
 
-import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
+@JsonFormat(shape = JsonFormat.Shape.OBJECT)
 public enum AvionEstado {
     BAJA("Baja"),
     DISPONIBLE("Disponible"),
@@ -15,8 +16,10 @@ public enum AvionEstado {
         this.descripcion = descripcion;
     }
 
-    // Indica que el valor de la propiedad será serializado como un valor simple en lugar de un objeto
-    @JsonValue
+    public String getNombre() {
+        return name();
+    }
+
     public String getDescripcion() {
         return descripcion;
     }

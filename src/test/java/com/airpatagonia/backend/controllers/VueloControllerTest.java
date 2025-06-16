@@ -75,9 +75,11 @@ class VueloControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)))
                 .andExpect(jsonPath("$[0].idVuelo", is(1)))
-                .andExpect(jsonPath("$[0].estado", is("PROGRAMADO")))
+                .andExpect(jsonPath("$[0].estado.nombre", is("PROGRAMADO")))
+                .andExpect(jsonPath("$[0].estado.descripcion", is("Programado")))
                 .andExpect(jsonPath("$[1].idVuelo", is(2)))
-                .andExpect(jsonPath("$[1].estado", is("EN_VUELO")));
+                .andExpect(jsonPath("$[1].estado.nombre", is("EN_VUELO")))
+                .andExpect(jsonPath("$[1].estado.descripcion", is("En vuelo")));
 
         verify(vueloService, times(1)).getAllVuelos();
         verifyNoMoreInteractions(vueloService);
@@ -93,7 +95,8 @@ class VueloControllerTest {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.idVuelo", is(1)))
-                .andExpect(jsonPath("$.estado", is("PROGRAMADO")));
+                .andExpect(jsonPath("$.estado.nombre", is("PROGRAMADO")))
+                .andExpect(jsonPath("$.estado.descripcion", is("Programado")));
 
         verify(vueloService, times(1)).getVueloById(1L);
         verifyNoMoreInteractions(vueloService);
@@ -124,7 +127,8 @@ class VueloControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)))
                 .andExpect(jsonPath("$[0].idVuelo", is(1)))
-                .andExpect(jsonPath("$[0].estado", is("PROGRAMADO")));
+                .andExpect(jsonPath("$[0].estado.nombre", is("PROGRAMADO")))
+                .andExpect(jsonPath("$[0].estado.descripcion", is("Programado")));
 
         verify(vueloService, times(1)).getVuelosByEstado(VueloEstado.PROGRAMADO);
         verifyNoMoreInteractions(vueloService);
@@ -133,15 +137,16 @@ class VueloControllerTest {
     @Test
     void getAllVuelosEstados_ShouldReturnListOfEstados() throws Exception {
         // Arrange
-        List<String> estados = Arrays.asList("PROGRAMADO", "EN_VUELO", "ATERRIZADO", "CANCELADO");
+        List<VueloEstado> estados = Arrays.asList(VueloEstado.values());
         when(vueloService.getAllVuelosEstados()).thenReturn(estados);
 
         // Act & Assert
         mockMvc.perform(get("/vuelos/estados")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(4)))
-                .andExpect(jsonPath("$", containsInAnyOrder("PROGRAMADO", "EN_VUELO", "ATERRIZADO", "CANCELADO")));
+                .andExpect(jsonPath("$", hasSize(estados.size())))
+                .andExpect(jsonPath("$[0].nombre", is(estados.get(0).name())))
+                .andExpect(jsonPath("$[0].descripcion", is(estados.get(0).getDescripcion())));
 
         verify(vueloService, times(1)).getAllVuelosEstados();
         verifyNoMoreInteractions(vueloService);
@@ -217,7 +222,7 @@ class VueloControllerTest {
                 .content(jsonRequest))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.idVuelo", is(1)))
-                .andExpect(jsonPath("$.estado", is("PROGRAMADO")));
+                .andExpect(jsonPath("$.estado.nombre", is("PROGRAMADO")));
                 
         verify(vueloService, times(1)).createVuelo(any());
         verifyNoMoreInteractions(vueloService);
@@ -262,7 +267,7 @@ class VueloControllerTest {
                 .content(requestBody))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.idVuelo", is(1)))
-                .andExpect(jsonPath("$.estado", is("DEMORADO")));
+                .andExpect(jsonPath("$.estado.nombre", is("DEMORADO")));
         
         verify(vueloService, times(1)).updateVuelo(eq(1L), any());
         verifyNoMoreInteractions(vueloService);

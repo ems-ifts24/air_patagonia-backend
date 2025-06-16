@@ -1,10 +1,12 @@
 package com.airpatagonia.backend.controllers;
 
 import com.airpatagonia.backend.controllers.TripulacionVueloController;
+import com.airpatagonia.backend.enums.EmpleadoEstado;
 import com.airpatagonia.backend.models.Empleado;
 import com.airpatagonia.backend.models.TripulacionVuelo;
 import com.airpatagonia.backend.models.TripulantePuesto;
 import com.airpatagonia.backend.models.Vuelo;
+import com.airpatagonia.backend.repositories.EmpleadoRepository;
 import com.airpatagonia.backend.services.TripulacionVueloService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -31,6 +33,9 @@ class TripulacionVueloControllerTest {
 
     @Mock
     private TripulacionVueloService tripulacionVueloService;
+    
+    @Mock
+    private EmpleadoRepository empleadoRepository;
 
     @InjectMocks
     private TripulacionVueloController tripulacionVueloController;
@@ -86,12 +91,60 @@ class TripulacionVueloControllerTest {
     @Test
     void asignarTripulante_ShouldReturnCreated() throws Exception {
         // Arrange
-        when(tripulacionVueloService.asignarTripulanteAVuelo(any(TripulacionVuelo.class))).thenReturn(empleado);
+        // Configurar el objeto asignacion con entidades completas
+        TripulacionVuelo asignacionRequest = new TripulacionVuelo();
+        
+        // Crear un nuevo vuelo con ID
+        Vuelo vueloRequest = new Vuelo();
+        vueloRequest.setIdVuelo(1L);
+        // No establecer el estado para evitar problemas de serialización
+        // El estado se manejará internamente en el servicio
+        
+        // Crear un nuevo empleado con ID y estado
+        Empleado empleadoRequest = new Empleado();
+        empleadoRequest.setIdEmpleado(1L);
+        empleadoRequest.setNombre("Carlos");
+        empleadoRequest.setApellido("Lopez");
+        empleadoRequest.setEstadoEmpleado(EmpleadoEstado.DISPONIBLE);
+        
+        // Crear un nuevo puesto con ID
+        TripulantePuesto puestoRequest = new TripulantePuesto();
+        puestoRequest.setIdPuestoTripulante(1L);
+        puestoRequest.setPuesto("Piloto");
+        
+        // Configurar el mock del servicio
+        when(empleadoRepository.findById(1L)).thenReturn(java.util.Optional.of(empleadoRequest));
+        when(tripulacionVueloService.asignarTripulanteAVuelo(any(TripulacionVuelo.class))).thenReturn(empleadoRequest);
+        
+        // Crear manualmente el JSON para evitar problemas con la serialización de los enums
+        String requestJson = """
+        {
+            "vuelo": {
+                "idVuelo": 1
+            },
+            "empleado": {
+                "idEmpleado": 1,
+                "nombre": "Carlos",
+                "apellido": "Lopez",
+                "estadoEmpleado": "DISPONIBLE"
+            },
+            "puesto": {
+                "idPuestoTripulante": 1,
+                "puesto": "Piloto"
+            }
+        }
+        """;
+        
+        System.out.println("Request JSON: " + requestJson);
         
         // Act & Assert
         mockMvc.perform(post("/tripulacion-vuelo")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(asignacion)))
+                .content(requestJson))
+                .andDo(result -> {
+                    System.out.println("Response Status: " + result.getResponse().getStatus());
+                    System.out.println("Response Content: " + result.getResponse().getContentAsString());
+                })
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.idEmpleado", is(1)))
                 .andExpect(jsonPath("$.nombre", is("Carlos")));

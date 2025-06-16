@@ -120,7 +120,7 @@ public class VueloController {
     // Estados de los vuelos
     @GetMapping("/estados")
     @Operation(summary = "Obtener todos los estados de los vuelos")
-    public ResponseEntity<List<String>> getAllVuelosEstados() {
+    public ResponseEntity<List<VueloEstado>> getAllVuelosEstados() {
         logger.info("Buscando todos los estados de los vuelos");
         return ResponseEntity.status(200).body(vueloService.getAllVuelosEstados());
     }

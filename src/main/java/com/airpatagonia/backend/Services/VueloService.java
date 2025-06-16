@@ -53,10 +53,8 @@ public class VueloService {
         return vuelos;
     }
 
-    public List<String> getAllVuelosEstados() {
-        return Arrays.stream(VueloEstado.values())
-                .map(VueloEstado::getDescripcion)
-                .collect(Collectors.toList());
+    public List<VueloEstado> getAllVuelosEstados() {
+        return Arrays.asList(VueloEstado.values());
     }
 
     // Crear vuelo
