@@ -1,6 +1,5 @@
 package com.airpatagonia.backend.controllers;
 
-import com.airpatagonia.backend.controllers.TripulacionVueloController;
 import com.airpatagonia.backend.enums.EmpleadoEstado;
 import com.airpatagonia.backend.models.Empleado;
 import com.airpatagonia.backend.models.TripulacionVuelo;
@@ -8,6 +7,7 @@ import com.airpatagonia.backend.models.TripulantePuesto;
 import com.airpatagonia.backend.models.Vuelo;
 import com.airpatagonia.backend.repositories.EmpleadoRepository;
 import com.airpatagonia.backend.services.TripulacionVueloService;
+import com.airpatagonia.backend.dtos.TripulanteDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -72,17 +72,57 @@ class TripulacionVueloControllerTest {
     }
 
     @Test
+    void getEmpleadosParaAsignar_WithVueloId_ShouldReturnListOfTripulanteDTO() throws Exception {
+        // Arrange
+        when(tripulacionVueloService.getEmpleadosParaTripulacionDeAVuelo(1L)).thenReturn(
+            Arrays.asList(new TripulanteDTO(empleado))
+        );
+
+        // Act & Assert
+        mockMvc.perform(get("/tripulacion-vuelo/")
+                .param("idVuelo", "1")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].idEmpleado", is(1)))
+                .andExpect(jsonPath("$[0].nombre", is("Carlos")));
+
+        verify(tripulacionVueloService, times(1)).getEmpleadosParaTripulacionDeAVuelo(1L);
+        verifyNoMoreInteractions(tripulacionVueloService);
+    }
+
+    @Test
+    void getEmpleadosParaAsignar_WithoutVueloId_ShouldReturnListOfTripulanteDTO() throws Exception {
+        // Arrange
+        when(tripulacionVueloService.getEmpleadosParaTripulacionDeAVuelo(null)).thenReturn(
+            Arrays.asList(new TripulanteDTO(empleado))
+        );
+
+        // Act & Assert
+        mockMvc.perform(get("/tripulacion-vuelo/")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].idEmpleado", is(1)))
+                .andExpect(jsonPath("$[0].nombre", is("Carlos")));
+
+        verify(tripulacionVueloService, times(1)).getEmpleadosParaTripulacionDeAVuelo(null);
+        verifyNoMoreInteractions(tripulacionVueloService);
+    }
+
+    @Test
     void getTripulantesVuelo_ShouldReturnListOfEmpleados() throws Exception {
         // Arrange
-        when(tripulacionVueloService.getTripulantesByVueloId(1L)).thenReturn(Arrays.asList(empleado));
+        when(tripulacionVueloService.getTripulantesByVueloId(1L)).thenReturn(Arrays.asList(asignacion));
 
         // Act & Assert
         mockMvc.perform(get("/tripulacion-vuelo/1/tripulantes")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)))
-                .andExpect(jsonPath("$[0].idEmpleado", is(1)))
-                .andExpect(jsonPath("$[0].nombre", is("Carlos")));
+                .andExpect(jsonPath("$[0].idTripulacionVuelo", is(1)))
+                .andExpect(jsonPath("$[0].empleado.idEmpleado", is(1)))
+                .andExpect(jsonPath("$[0].empleado.nombre", is("Carlos")));
 
         verify(tripulacionVueloService, times(1)).getTripulantesByVueloId(1L);
         verifyNoMoreInteractions(tripulacionVueloService);
@@ -166,11 +206,13 @@ class TripulacionVueloControllerTest {
         verify(tripulacionVueloService, times(1)).quitarTripulante(1L, 1L);
         verifyNoMoreInteractions(tripulacionVueloService);
     }
-
+    
     @Test
     void getAllTripulantePuestos_ShouldReturnListOfPuestos() throws Exception {
         // Arrange
-        when(tripulacionVueloService.getAllTripulantePuestos()).thenReturn(Arrays.asList(puesto));
+        when(tripulacionVueloService.getAllTripulantePuestos()).thenReturn(
+            Arrays.asList(puesto)
+        );
 
         // Act & Assert
         mockMvc.perform(get("/tripulacion-vuelo/puestos")
