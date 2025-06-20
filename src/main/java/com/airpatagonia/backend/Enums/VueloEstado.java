@@ -1,5 +1,9 @@
 package com.airpatagonia.backend.enums;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+// Indica que el enum se serializa como un objeto JSON completo (con nombre y descripcion)
+@JsonFormat(shape = JsonFormat.Shape.OBJECT)
 public enum VueloEstado {
     PROGRAMADO("Programado"),
     EMBARCANDO("Embarcando"),
@@ -15,6 +19,10 @@ public enum VueloEstado {
 
     VueloEstado(String descripcion) {
         this.descripcion = descripcion;
+    }
+
+    public String getNombre() {
+        return name();
     }
 
     public String getDescripcion() {

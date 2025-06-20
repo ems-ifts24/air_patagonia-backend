@@ -1,6 +1,5 @@
 package com.airpatagonia.backend.controllers;
 
-import com.airpatagonia.backend.controllers.InfoGeneralController;
 import com.airpatagonia.backend.models.Ciudad;
 import com.airpatagonia.backend.models.Pais;
 import com.airpatagonia.backend.services.UbicacionService;

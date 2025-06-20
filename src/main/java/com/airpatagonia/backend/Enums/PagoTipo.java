@@ -1,7 +1,8 @@
 package com.airpatagonia.backend.enums;
 
-import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
+@JsonFormat(shape = JsonFormat.Shape.OBJECT)
 public enum PagoTipo {
     EFECTIVO("Efectivo"),
     TARJETA("Tarjeta"),
@@ -13,7 +14,10 @@ public enum PagoTipo {
         this.descripcion = descripcion;
     }
 
-    @JsonValue
+    public String getNombre() {
+        return name();
+    }
+
     public String getDescripcion() {
         return descripcion;
     }   

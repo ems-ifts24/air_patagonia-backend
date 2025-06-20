@@ -1,6 +1,5 @@
 package com.airpatagonia.backend.controllers;
 
-import com.airpatagonia.backend.controllers.ClienteController;
 import com.airpatagonia.backend.models.Cliente;
 import com.airpatagonia.backend.services.ClienteService;
 

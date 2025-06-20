@@ -1,7 +1,9 @@
 package com.airpatagonia.backend.enums;
 
 import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
+@JsonFormat(shape = JsonFormat.Shape.OBJECT)
 public enum PasajeEstado {
     VIGENTE("Vigente"),
     MODIFICADO("Modificado"),
@@ -14,7 +16,10 @@ public enum PasajeEstado {
         this.descripcion = descripcion;
     }
 
-    @JsonValue
+    public String getNombre() {
+        return name();
+    }
+
     public String getDescripcion() {
         return descripcion;
     }

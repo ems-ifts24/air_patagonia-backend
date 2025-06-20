@@ -1,6 +1,5 @@
 package com.airpatagonia.backend.controllers;
 
-import com.airpatagonia.backend.controllers.EmpleadoController;
 import com.airpatagonia.backend.models.Empleado;
 import com.airpatagonia.backend.services.EmpleadoService;
 

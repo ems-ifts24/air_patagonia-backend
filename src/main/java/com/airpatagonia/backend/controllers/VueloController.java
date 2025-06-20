@@ -23,6 +23,7 @@ import com.airpatagonia.backend.services.PagoDePasajeService;
 import com.airpatagonia.backend.services.VueloService;
 import com.airpatagonia.backend.dtos.VueloDTO;
 import com.airpatagonia.backend.enums.VueloEstado;
+import com.airpatagonia.backend.exceptions.ResourceNotFoundException;
 
 import io.swagger.v3.oas.annotations.Operation;
 
@@ -44,7 +45,7 @@ public class VueloController {
    
     // GET Vuelos
     @GetMapping
-    @Operation(summary = "Obtener todos los vuelos")
+    @Operation(summary = "Obtener todos los vuelos excepto los eliminados (BAJA_LOGICA)")
     public ResponseEntity<List<Vuelo>> getAllVuelos() {
         logger.info("Buscando todos los vuelos");
         return ResponseEntity.status(200).body(vueloService.getAllVuelos());
@@ -61,6 +62,13 @@ public class VueloController {
         return ResponseEntity.status(200).body(vuelo);
     }
 
+    @GetMapping("/dtos/{idVuelo}")
+    @Operation(summary = "Obtener un vueloDTO por su ID")
+    public ResponseEntity<VueloDTO> getVueloDTOById(@PathVariable Long idVuelo) {
+        logger.info("Buscando vueloDTO con id: {}", idVuelo);
+        return ResponseEntity.status(200).body(vueloService.getVueloDTOById(idVuelo));
+    }
+
     @GetMapping("/estado/{estado}")
     @Operation(summary = "Obtener vuelos por estado")
     public ResponseEntity<List<Vuelo>> getVuelosByEstado(@PathVariable VueloEstado estado) {
@@ -72,6 +80,7 @@ public class VueloController {
         return ResponseEntity.status(200).body(vuelos);
     }
 
+    // POST Vuelos (crear)
     @PostMapping
     @Operation(summary = "Crear un nuevo vuelo")
     public ResponseEntity<Vuelo> createVuelo(@RequestBody VueloDTO vueloDTO) {
@@ -85,17 +94,31 @@ public class VueloController {
         return ResponseEntity.status(201).body(vueloCreated);
     }
 
+    // PUT Vuelos (actualizar)
     @PutMapping("/{idVuelo}")
     @Operation(summary = "Actualizar un vuelo por su ID")
     public ResponseEntity<Vuelo> updateVuelo(@PathVariable Long idVuelo, @RequestBody VueloDTO vueloDTO) {
         logger.info("Actualizando vuelo con id: {}", idVuelo);
-        Vuelo vueloUpdated = vueloService.updateVuelo(idVuelo, vueloDTO);
-        if (vueloUpdated == null) {
+        
+        if (vueloDTO.getIdVuelo() == null)
+            vueloDTO.setIdVuelo(idVuelo);
+    
+        if (!idVuelo.equals(vueloDTO.getIdVuelo())) {
+            logger.warn("El idVuelo en el body ({}) no coincide con el idVuelo en la URL ({})", vueloDTO.getIdVuelo(), idVuelo);
+            return ResponseEntity.status(400).build();
+        }
+
+        try {
+            Vuelo vueloUpdated = vueloService.updateVuelo(vueloDTO);
+            logger.info("Vuelo actualizado exitosamente: {}", vueloUpdated);
+            return ResponseEntity.status(200).body(vueloUpdated);
+        } catch (ResourceNotFoundException e) {
             logger.info("Vuelo no encontrado con id: {}", idVuelo);
             return ResponseEntity.status(404).build();
+        } catch (RuntimeException e) {
+            logger.error("Error al actualizar el vuelo: {}", e.getMessage());
+            return ResponseEntity.status(400).build();
         }
-        logger.info("Vuelo actualizado exitosamente: {}", vueloUpdated);
-        return ResponseEntity.status(200).body(vueloUpdated);
     }
 
     @DeleteMapping("/{idVuelo}")
@@ -120,7 +143,7 @@ public class VueloController {
     // Estados de los vuelos
     @GetMapping("/estados")
     @Operation(summary = "Obtener todos los estados de los vuelos")
-    public ResponseEntity<List<String>> getAllVuelosEstados() {
+    public ResponseEntity<List<VueloEstado>> getAllVuelosEstados() {
         logger.info("Buscando todos los estados de los vuelos");
         return ResponseEntity.status(200).body(vueloService.getAllVuelosEstados());
     }

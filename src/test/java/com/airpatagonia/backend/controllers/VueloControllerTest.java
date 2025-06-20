@@ -1,6 +1,7 @@
 package com.airpatagonia.backend.controllers;
 
 import com.airpatagonia.backend.enums.VueloEstado;
+import com.airpatagonia.backend.exceptions.ResourceNotFoundException;
 import com.airpatagonia.backend.models.DetallePasaje;
 import com.airpatagonia.backend.models.PagoDePasaje;
 import com.airpatagonia.backend.models.Vuelo;
@@ -75,9 +76,11 @@ class VueloControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)))
                 .andExpect(jsonPath("$[0].idVuelo", is(1)))
-                .andExpect(jsonPath("$[0].estado", is("PROGRAMADO")))
+                .andExpect(jsonPath("$[0].estado.nombre", is("PROGRAMADO")))
+                .andExpect(jsonPath("$[0].estado.descripcion", is("Programado")))
                 .andExpect(jsonPath("$[1].idVuelo", is(2)))
-                .andExpect(jsonPath("$[1].estado", is("EN_VUELO")));
+                .andExpect(jsonPath("$[1].estado.nombre", is("EN_VUELO")))
+                .andExpect(jsonPath("$[1].estado.descripcion", is("En vuelo")));
 
         verify(vueloService, times(1)).getAllVuelos();
         verifyNoMoreInteractions(vueloService);
@@ -93,7 +96,8 @@ class VueloControllerTest {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.idVuelo", is(1)))
-                .andExpect(jsonPath("$.estado", is("PROGRAMADO")));
+                .andExpect(jsonPath("$.estado.nombre", is("PROGRAMADO")))
+                .andExpect(jsonPath("$.estado.descripcion", is("Programado")));
 
         verify(vueloService, times(1)).getVueloById(1L);
         verifyNoMoreInteractions(vueloService);
@@ -124,7 +128,8 @@ class VueloControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)))
                 .andExpect(jsonPath("$[0].idVuelo", is(1)))
-                .andExpect(jsonPath("$[0].estado", is("PROGRAMADO")));
+                .andExpect(jsonPath("$[0].estado.nombre", is("PROGRAMADO")))
+                .andExpect(jsonPath("$[0].estado.descripcion", is("Programado")));
 
         verify(vueloService, times(1)).getVuelosByEstado(VueloEstado.PROGRAMADO);
         verifyNoMoreInteractions(vueloService);
@@ -133,15 +138,16 @@ class VueloControllerTest {
     @Test
     void getAllVuelosEstados_ShouldReturnListOfEstados() throws Exception {
         // Arrange
-        List<String> estados = Arrays.asList("PROGRAMADO", "EN_VUELO", "ATERRIZADO", "CANCELADO");
+        List<VueloEstado> estados = Arrays.asList(VueloEstado.values());
         when(vueloService.getAllVuelosEstados()).thenReturn(estados);
 
         // Act & Assert
         mockMvc.perform(get("/vuelos/estados")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(4)))
-                .andExpect(jsonPath("$", containsInAnyOrder("PROGRAMADO", "EN_VUELO", "ATERRIZADO", "CANCELADO")));
+                .andExpect(jsonPath("$", hasSize(estados.size())))
+                .andExpect(jsonPath("$[0].nombre", is(estados.get(0).name())))
+                .andExpect(jsonPath("$[0].descripcion", is(estados.get(0).getDescripcion())));
 
         verify(vueloService, times(1)).getAllVuelosEstados();
         verifyNoMoreInteractions(vueloService);
@@ -217,7 +223,7 @@ class VueloControllerTest {
                 .content(jsonRequest))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.idVuelo", is(1)))
-                .andExpect(jsonPath("$.estado", is("PROGRAMADO")));
+                .andExpect(jsonPath("$.estado.nombre", is("PROGRAMADO")));
                 
         verify(vueloService, times(1)).createVuelo(any());
         verifyNoMoreInteractions(vueloService);
@@ -248,10 +254,11 @@ class VueloControllerTest {
         updatedVuelo.setIdVuelo(1L);
         updatedVuelo.setEstado(VueloEstado.DEMORADO);
         
-        when(vueloService.updateVuelo(eq(1L), any())).thenReturn(updatedVuelo);
+        when(vueloService.updateVuelo(any())).thenReturn(updatedVuelo);
         
         String requestBody = """
         {
+            "idVuelo": 1,
             "estado": "DEMORADO"
         }
         """;
@@ -262,19 +269,20 @@ class VueloControllerTest {
                 .content(requestBody))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.idVuelo", is(1)))
-                .andExpect(jsonPath("$.estado", is("DEMORADO")));
+                .andExpect(jsonPath("$.estado.nombre", is("DEMORADO")));
         
-        verify(vueloService, times(1)).updateVuelo(eq(1L), any());
+        verify(vueloService, times(1)).updateVuelo(any());
         verifyNoMoreInteractions(vueloService);
     }
     
     @Test
     void updateVuelo_WhenVueloNotExists_ShouldReturnNotFound() throws Exception {
         // Arrange
-        when(vueloService.updateVuelo(eq(999L), any())).thenReturn(null);
+        when(vueloService.updateVuelo(any())).thenThrow(new ResourceNotFoundException("Vuelo no encontrado"));
         
         String requestBody = """
         {
+            "idVuelo": 999,
             "estado": "DEMORADO"
         }
         """;
@@ -285,8 +293,27 @@ class VueloControllerTest {
                 .content(requestBody))
                 .andExpect(status().isNotFound());
         
-        verify(vueloService, times(1)).updateVuelo(eq(999L), any());
+        verify(vueloService, times(1)).updateVuelo(any());
         verifyNoMoreInteractions(vueloService);
+    }
+    
+    @Test
+    void updateVuelo_WhenIdMismatch_ShouldReturnBadRequest() throws Exception {
+        // Arrange
+        String requestBody = """
+        {
+            "idVuelo": 2,
+            "estado": "DEMORADO"
+        }
+        """;
+        
+        // Act & Assert
+        mockMvc.perform(put("/vuelos/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody))
+                .andExpect(status().isBadRequest());
+        
+        verifyNoInteractions(vueloService);
     }
     
     @Test

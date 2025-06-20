@@ -15,8 +15,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.springframework.transaction.annotation.Transactional;
+import com.airpatagonia.backend.dtos.TripulanteDTO;
 
 @Service
 public class TripulacionVueloService {
@@ -33,11 +36,8 @@ public class TripulacionVueloService {
     private EmpleadoRepository empleadoRepository;
 
 
-    public List<Empleado> getTripulantesByVueloId(Long idVuelo) {
-        return tripulacionVueloRepository.findByVuelo_IdVuelo(idVuelo)
-            .stream()
-            .map(TripulacionVuelo::getEmpleado)
-            .collect(Collectors.toList());
+    public List<TripulacionVuelo> getTripulantesByVueloId(Long idVuelo) {
+        return tripulacionVueloRepository.findByVuelo_IdVuelo(idVuelo);
     }
 
     @Transactional
@@ -64,15 +64,16 @@ public class TripulacionVueloService {
         return empleadoRepository.findById(asignacionGuardada.getEmpleado().getIdEmpleado()).get();
     }
 
+    @Transactional
     public void quitarTripulante(Long idVuelo, Long idEmpleado) {
+        logger.info("Quitando tripulante {} del vuelo {}", idEmpleado, idVuelo);
+        Empleado empleado = empleadoRepository.findById(idEmpleado).get();
+        empleado.setEstadoEmpleado(EmpleadoEstado.DISPONIBLE);
+        empleadoRepository.save(empleado);
+
         tripulacionVueloRepository.deleteTripulacionVueloByVuelo_IdVueloAndEmpleado_IdEmpleado(idVuelo, idEmpleado);
     }
 
-
-    // TRIPULANTES PUESTOS
-    public List<TripulantePuesto> getAllTripulantePuestos() {
-        return tripulantePuestoRepository.findAll();
-    }
 
     // Elimino la tripulacion del vuelo
     @Transactional
@@ -83,16 +84,55 @@ public class TripulacionVueloService {
 
     private void DisponibilizarEmpleados(Long idVuelo) {
         logger.info("Disponibilizando empleados del vuelo con id: {}", idVuelo);
-        List<Empleado> empleados = getTripulantesByVueloId(idVuelo);
-        logger.debug("Empleados obtenidos exitosamente: {}", empleados);
+        List<TripulacionVuelo> tripulantes = getTripulantesByVueloId(idVuelo);
+        logger.debug("Empleados obtenidos exitosamente: {}", tripulantes);
         
-        if (!empleados.isEmpty()) {
-            for (Empleado empleado : empleados) {
-                logger.debug("Disponibilizando empleado con id: {}", empleado.getIdEmpleado());
-                empleado.setEstadoEmpleado(EmpleadoEstado.DISPONIBLE);
-                empleadoRepository.save(empleado);
+        if (!tripulantes.isEmpty()) {
+            for (TripulacionVuelo tripulante : tripulantes) {
+                logger.debug("Disponibilizando empleado con id: {}", tripulante.getEmpleado().getIdEmpleado());
+                tripulante.getEmpleado().setEstadoEmpleado(EmpleadoEstado.DISPONIBLE);
+                empleadoRepository.save(tripulante.getEmpleado());
             }
         }
     }
 
+    // TRIPULANTES PUESTOS
+    public List<TripulantePuesto> getAllTripulantePuestos() {
+        return tripulantePuestoRepository.findAll();
+    }
+    
+    /**
+     * Obtiene una lista de empleados que pueden ser asignados a un vuelo.
+     * Incluye empleados DISPONIBLES y los que ya están asignados al vuelo especificado.
+     * 
+     * @param idVuelo ID del vuelo (opcional). Si se proporciona, incluye a los empleados ya asignados a ese vuelo.
+     * @return Lista de empleados en formato DTO
+     */
+    @Transactional
+    public List<TripulanteDTO> getEmpleadosParaTripulacionDeAVuelo(Long idVuelo) {
+        logger.info("Si idVuelo no es nulo se buscan los tripulantes asignados.");
+        List<TripulanteDTO> tripulantesAsignados = idVuelo != null
+            ? tripulacionVueloRepository
+                .findByVuelo_IdVuelo(idVuelo)
+                .stream()
+                .map(this::mapToTripulanteDTO)
+                .collect(Collectors.toList())
+            : new ArrayList<>();
+
+        logger.info("Se agregan todos los empleados disponibles.");
+        tripulantesAsignados.addAll(empleadoRepository
+            .findByEstadoEmpleado(EmpleadoEstado.DISPONIBLE)
+            .stream()
+            .map(TripulanteDTO::new)
+            .collect(Collectors.toList()));
+
+        return tripulantesAsignados;
+    }
+
+    private TripulanteDTO mapToTripulanteDTO(TripulacionVuelo tripulacion) {
+        TripulanteDTO dto = new TripulanteDTO(tripulacion.getEmpleado());
+        dto.setPuestoTripulante(tripulacion.getPuesto());
+        dto.setIdVueloAsignado(tripulacion.getVuelo().getIdVuelo());
+        return dto;
+    }
 }
