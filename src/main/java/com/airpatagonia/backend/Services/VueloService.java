@@ -68,7 +68,7 @@ public class VueloService {
 
     // Crear vuelo
     public Vuelo createVuelo(VueloDTO vueloDTO) {
-        Vuelo vuelo = completarVuelo(new Vuelo(), vueloDTO);
+        Vuelo vuelo = completarVuelo(new Vuelo(), vueloDTO, true);
         return vueloRepository.save(vuelo);
     }
 
@@ -76,7 +76,7 @@ public class VueloService {
     public Vuelo updateVuelo(VueloDTO vueloDTO) {
         Vuelo vuelo = getVueloById( vueloDTO.getIdVuelo());
         logger.debug("Se procede a completar el Vuelo con id: {}", vueloDTO.getIdVuelo());
-        Vuelo vueloActualizado = completarVuelo(vuelo, vueloDTO);
+        Vuelo vueloActualizado = completarVuelo(vuelo, vueloDTO, false);
         return vueloRepository.save(vueloActualizado);
     }
 
@@ -104,9 +104,13 @@ public class VueloService {
     // ----------------
     // Metodos privados
     // ----------------
-    private Vuelo completarVuelo(Vuelo vuelo, VueloDTO vueloDTO) {
+    private Vuelo completarVuelo(Vuelo vuelo, VueloDTO vueloDTO, boolean esNuevo) {
         logger.info("Creando vuelo con datos del dto: {}", vueloDTO);
-        vuelo.setAliasVuelo(obtenerNuevoAliasVuelo());
+        if (esNuevo)
+            vuelo.setAliasVuelo(obtenerNuevoAliasVuelo());
+        else
+            vuelo.setAliasVuelo(vueloDTO.getAliasVuelo());
+
         vuelo.setFechaPartida(vueloDTO.getFechaPartida());
         vuelo.setFechaArribo(vueloDTO.getFechaArribo());
         vuelo.setEstado(vueloDTO.getEstado());
