@@ -18,4 +18,5 @@ public interface VueloRepository extends JpaRepository<Vuelo, Long> {
 
     Vuelo save(Vuelo vuelo);
 
+    Vuelo findTopByOrderByIdVueloDesc();
 }

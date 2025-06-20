@@ -1,6 +1,7 @@
 package com.airpatagonia.backend.controllers;
 
 import com.airpatagonia.backend.enums.VueloEstado;
+import com.airpatagonia.backend.exceptions.ResourceNotFoundException;
 import com.airpatagonia.backend.models.DetallePasaje;
 import com.airpatagonia.backend.models.PagoDePasaje;
 import com.airpatagonia.backend.models.Vuelo;
@@ -253,10 +254,11 @@ class VueloControllerTest {
         updatedVuelo.setIdVuelo(1L);
         updatedVuelo.setEstado(VueloEstado.DEMORADO);
         
-        when(vueloService.updateVuelo(eq(1L), any())).thenReturn(updatedVuelo);
+        when(vueloService.updateVuelo(any())).thenReturn(updatedVuelo);
         
         String requestBody = """
         {
+            "idVuelo": 1,
             "estado": "DEMORADO"
         }
         """;
@@ -269,17 +271,18 @@ class VueloControllerTest {
                 .andExpect(jsonPath("$.idVuelo", is(1)))
                 .andExpect(jsonPath("$.estado.nombre", is("DEMORADO")));
         
-        verify(vueloService, times(1)).updateVuelo(eq(1L), any());
+        verify(vueloService, times(1)).updateVuelo(any());
         verifyNoMoreInteractions(vueloService);
     }
     
     @Test
     void updateVuelo_WhenVueloNotExists_ShouldReturnNotFound() throws Exception {
         // Arrange
-        when(vueloService.updateVuelo(eq(999L), any())).thenReturn(null);
+        when(vueloService.updateVuelo(any())).thenThrow(new ResourceNotFoundException("Vuelo no encontrado"));
         
         String requestBody = """
         {
+            "idVuelo": 999,
             "estado": "DEMORADO"
         }
         """;
@@ -290,8 +293,27 @@ class VueloControllerTest {
                 .content(requestBody))
                 .andExpect(status().isNotFound());
         
-        verify(vueloService, times(1)).updateVuelo(eq(999L), any());
+        verify(vueloService, times(1)).updateVuelo(any());
         verifyNoMoreInteractions(vueloService);
+    }
+    
+    @Test
+    void updateVuelo_WhenIdMismatch_ShouldReturnBadRequest() throws Exception {
+        // Arrange
+        String requestBody = """
+        {
+            "idVuelo": 2,
+            "estado": "DEMORADO"
+        }
+        """;
+        
+        // Act & Assert
+        mockMvc.perform(put("/vuelos/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody))
+                .andExpect(status().isBadRequest());
+        
+        verifyNoInteractions(vueloService);
     }
     
     @Test

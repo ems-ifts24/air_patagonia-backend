@@ -51,6 +51,11 @@ public class VueloService {
         return vuelo;
     }
 
+    public VueloDTO getVueloDTOById(Long id) {
+        Vuelo vuelo = getVueloById(id);
+        return new VueloDTO(vuelo);
+    }
+
     public List<Vuelo> getVuelosByEstado(VueloEstado estado) {
         List<Vuelo> vuelos = vueloRepository.findByEstado(estado);
         logger.info("Se encontraron {} vuelos con estado: {}", vuelos.isEmpty() ? 0 : vuelos.size(), estado);
@@ -68,14 +73,11 @@ public class VueloService {
     }
 
     // Actualizar vuelo
-    public Vuelo updateVuelo(Long idVuelo, VueloDTO vueloDTO) {
-        Vuelo vuelo = getVueloById(idVuelo);
-        if (vuelo == null)
-            throw new ResourceNotFoundException("Vuelo no encontrado con id: " + idVuelo);
-        
-        vuelo = completarVuelo(vuelo, vueloDTO);
-
-        return vueloRepository.save(vuelo);
+    public Vuelo updateVuelo(VueloDTO vueloDTO) {
+        Vuelo vuelo = getVueloById( vueloDTO.getIdVuelo());
+        logger.debug("Se procede a completar el Vuelo con id: {}", vueloDTO.getIdVuelo());
+        Vuelo vueloActualizado = completarVuelo(vuelo, vueloDTO);
+        return vueloRepository.save(vueloActualizado);
     }
 
     @Transactional
@@ -104,6 +106,7 @@ public class VueloService {
     // ----------------
     private Vuelo completarVuelo(Vuelo vuelo, VueloDTO vueloDTO) {
         logger.info("Creando vuelo con datos del dto: {}", vueloDTO);
+        vuelo.setAliasVuelo(obtenerNuevoAliasVuelo());
         vuelo.setFechaPartida(vueloDTO.getFechaPartida());
         vuelo.setFechaArribo(vueloDTO.getFechaArribo());
         vuelo.setEstado(vueloDTO.getEstado());
@@ -151,4 +154,16 @@ public class VueloService {
             vuelo.setAeropuertoArribo(aeropuerto);
     }
 
+    
+    public String obtenerNuevoAliasVuelo() {
+        logger.info("Obteniendo el último alisVuelo de la tabla Vuelo");
+        Vuelo lastVuelo = vueloRepository.findTopByOrderByIdVueloDesc();
+        if (lastVuelo == null)
+            return "AP1200";
+
+        String aliasVuelo = lastVuelo.getAliasVuelo();
+        int numeroDeVuelo = Integer.parseInt(aliasVuelo.substring(2));
+        numeroDeVuelo++;
+        return "AP" + numeroDeVuelo;
+    }
 }
