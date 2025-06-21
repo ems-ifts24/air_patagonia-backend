@@ -18,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-import org.springframework.transaction.annotation.Transactional;
 import com.airpatagonia.backend.dtos.TripulanteDTO;
 
 @Service
@@ -62,6 +61,15 @@ public class TripulacionVueloService {
 
         // Devolver la asignacion guardada con sus relaciones completas
         return empleadoRepository.findById(asignacionGuardada.getEmpleado().getIdEmpleado()).get();
+    }
+
+    public TripulacionVuelo updateTripulante(TripulacionVuelo tripulacionVuelo) {
+        logger.info("Actualizando tripulante {} del vuelo {}", tripulacionVuelo.getEmpleado().getIdEmpleado(), tripulacionVuelo.getVuelo().getIdVuelo());
+        TripulacionVuelo tripulacionVueloUpdated = tripulacionVueloRepository.findByVuelo_IdVueloAndEmpleado_IdEmpleado(tripulacionVuelo.getVuelo().getIdVuelo(), tripulacionVuelo.getEmpleado().getIdEmpleado());
+
+        tripulacionVueloUpdated.setPuesto(tripulacionVuelo.getPuesto());
+        tripulacionVueloUpdated = tripulacionVueloRepository.save(tripulacionVueloUpdated);
+        return tripulacionVueloUpdated;
     }
 
     @Transactional

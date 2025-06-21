@@ -131,14 +131,9 @@ class TripulacionVueloControllerTest {
     @Test
     void asignarTripulante_ShouldReturnCreated() throws Exception {
         // Arrange
-        // Configurar el objeto asignacion con entidades completas
-        TripulacionVuelo asignacionRequest = new TripulacionVuelo();
-        
         // Crear un nuevo vuelo con ID
         Vuelo vueloRequest = new Vuelo();
         vueloRequest.setIdVuelo(1L);
-        // No establecer el estado para evitar problemas de serialización
-        // El estado se manejará internamente en el servicio
         
         // Crear un nuevo empleado con ID y estado
         Empleado empleadoRequest = new Empleado();
@@ -152,8 +147,13 @@ class TripulacionVueloControllerTest {
         puestoRequest.setIdPuestoTripulante(1L);
         puestoRequest.setPuesto("Piloto");
         
+        // Crear la asignación
+        TripulacionVuelo asignacionRequest = new TripulacionVuelo();
+        asignacionRequest.setVuelo(vueloRequest);
+        asignacionRequest.setEmpleado(empleadoRequest);
+        asignacionRequest.setPuesto(puestoRequest);
+        
         // Configurar el mock del servicio
-        when(empleadoRepository.findById(1L)).thenReturn(java.util.Optional.of(empleadoRequest));
         when(tripulacionVueloService.asignarTripulanteAVuelo(any(TripulacionVuelo.class))).thenReturn(empleadoRequest);
         
         // Crear manualmente el JSON para evitar problemas con la serialización de los enums
@@ -175,10 +175,8 @@ class TripulacionVueloControllerTest {
         }
         """;
         
-        System.out.println("Request JSON: " + requestJson);
-        
         // Act & Assert
-        mockMvc.perform(post("/tripulacion-vuelo")
+        mockMvc.perform(post("/tripulacion-vuelo/1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestJson))
                 .andDo(result -> {
@@ -192,7 +190,110 @@ class TripulacionVueloControllerTest {
         verify(tripulacionVueloService, times(1)).asignarTripulanteAVuelo(any(TripulacionVuelo.class));
         verifyNoMoreInteractions(tripulacionVueloService);
     }
+    
+    @Test
+    void asignarTripulante_WithMismatchedVueloId_ShouldReturnBadRequest() throws Exception {
+        // Arrange
+        String requestJson = """
+        {
+            "vuelo": {
+                "idVuelo": 2
+            },
+            "empleado": {
+                "idEmpleado": 1
+            },
+            "puesto": {
+                "idPuestoTripulante": 1
+            }
+        }
+        """;
+        
+        // Act & Assert
+        mockMvc.perform(post("/tripulacion-vuelo/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestJson))
+                .andExpect(status().isBadRequest());
+                
+        verifyNoInteractions(tripulacionVueloService);
+    }
 
+    @Test
+    void updateTripulante_ShouldReturnUpdatedTripulacion() throws Exception {
+        // Arrange
+        TripulacionVuelo updatedAsignacion = new TripulacionVuelo();
+        updatedAsignacion.setIdTripulacionVuelo(1L);
+        
+        Vuelo vuelo = new Vuelo();
+        vuelo.setIdVuelo(1L);
+        
+        Empleado empleado = new Empleado();
+        empleado.setIdEmpleado(1L);
+        
+        TripulantePuesto nuevoPuesto = new TripulantePuesto();
+        nuevoPuesto.setIdPuestoTripulante(2L);
+        nuevoPuesto.setPuesto("Copiloto");
+        
+        updatedAsignacion.setVuelo(vuelo);
+        updatedAsignacion.setEmpleado(empleado);
+        updatedAsignacion.setPuesto(nuevoPuesto);
+        
+        when(tripulacionVueloService.updateTripulante(any(TripulacionVuelo.class))).thenReturn(updatedAsignacion);
+        
+        String requestJson = """
+        {
+            "idTripulacionVuelo": 1,
+            "vuelo": {
+                "idVuelo": 1
+            },
+            "empleado": {
+                "idEmpleado": 1
+            },
+            "puesto": {
+                "idPuestoTripulante": 2,
+                "puesto": "Copiloto"
+            }
+        }
+        """;
+        
+        // Act & Assert
+        mockMvc.perform(put("/tripulacion-vuelo/1/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestJson))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.idTripulacionVuelo", is(1)))
+                .andExpect(jsonPath("$.puesto.puesto", is("Copiloto")));
+                
+        verify(tripulacionVueloService, times(1)).updateTripulante(any(TripulacionVuelo.class));
+        verifyNoMoreInteractions(tripulacionVueloService);
+    }
+    
+    @Test
+    void updateTripulante_WithMismatchedIds_ShouldReturnBadRequest() throws Exception {
+        // Arrange
+        String requestJson = """
+        {
+            "vuelo": {
+                "idVuelo": 2
+            },
+            "empleado": {
+                "idEmpleado": 2
+            },
+            "puesto": {
+                "idPuestoTripulante": 1,
+                "puesto": "Piloto"
+            }
+        }
+        """;
+        
+        // Act & Assert
+        mockMvc.perform(put("/tripulacion-vuelo/1/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestJson))
+                .andExpect(status().isBadRequest());
+                
+        verifyNoInteractions(tripulacionVueloService);
+    }
+    
     @Test
     void quitarTripulante_ShouldReturnNoContent() throws Exception {
         // Arrange
