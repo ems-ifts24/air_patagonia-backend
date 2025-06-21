@@ -64,6 +64,12 @@ public class TripulacionVueloService {
         return empleadoRepository.findById(asignacionGuardada.getEmpleado().getIdEmpleado()).get();
     }
 
+    public TripulacionVuelo updateTripulante(TripulacionVuelo tripulacionVuelo) {
+        logger.info("Actualizando tripulante {} del vuelo {}", tripulacionVuelo.getEmpleado().getIdEmpleado(), tripulacionVuelo.getVuelo().getIdVuelo());
+        TripulacionVuelo tripulacionVueloUpdated = tripulacionVueloRepository.save(tripulacionVuelo);
+        return tripulacionVueloUpdated;
+    }
+
     @Transactional
     public void quitarTripulante(Long idVuelo, Long idEmpleado) {
         logger.info("Quitando tripulante {} del vuelo {}", idEmpleado, idVuelo);

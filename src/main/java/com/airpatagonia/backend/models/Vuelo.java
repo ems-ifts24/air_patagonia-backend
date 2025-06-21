@@ -66,12 +66,10 @@ public class Vuelo {
     @NotNull
     private Aeropuerto aeropuertoArribo;
 
-    @JsonIgnore
     @ManyToMany
     @JoinTable(name = "TripulacionVuelo", joinColumns = @JoinColumn(name = "IdVuelo"), inverseJoinColumns = @JoinColumn(name = "IdEmpleado"))
     private List<Empleado> tripulantes;
 
-    @JsonIgnore
     @ManyToMany
     @JoinTable(name = "Pasajero", joinColumns = @JoinColumn(name = "IdVuelo"), inverseJoinColumns = @JoinColumn(name = "IdCliente"))
     private List<Pasajero> pasajeros;

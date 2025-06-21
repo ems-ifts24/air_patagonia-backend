@@ -1,5 +1,7 @@
 package com.airpatagonia.backend.controllers;
 
+import java.util.Objects;
+
 import com.airpatagonia.backend.dtos.TripulanteDTO;
 import com.airpatagonia.backend.models.Empleado;
 import com.airpatagonia.backend.models.TripulacionVuelo;
@@ -11,6 +13,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.apache.coyote.BadRequestException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,12 +45,40 @@ public class TripulacionVueloController {
         return ResponseEntity.status(200).body(tripulantes);
     }
 
-    @PostMapping
+    @PostMapping("/{idVuelo}")
     @Operation(summary = "Asignar un tripulante a un vuelo")
-    public ResponseEntity<Empleado> asignarTripulante(@RequestBody TripulacionVuelo asignacion) {
-        logger.info("Asignando tripulante al vuelo {}", asignacion.getVuelo().getIdVuelo());
+    public ResponseEntity<Empleado> asignarTripulante(@PathVariable Long idVuelo, @RequestBody TripulacionVuelo asignacion) {
+        logger.info("Asignando tripulante al vuelo {}", idVuelo);
+        Objects.requireNonNull(asignacion.getVuelo(), "La tripulacion del vuelo no tiene un vuelo asignado");
+        Objects.requireNonNull(asignacion.getEmpleado(), "La tripulacion del vuelo no tiene un empleado asignado");
+        Objects.requireNonNull(asignacion.getPuesto(), "La tripulacion del vuelo no tiene un puesto asignado");
+        logger.debug("Tripulacion: {}", asignacion);
+
+        if(!idVuelo.equals(asignacion.getVuelo().getIdVuelo())) {
+            logger.warn("El vuelo asignado a la tripulacion no coincide con su id en la URL");
+            return ResponseEntity.status(400).build();
+        }
+
         Empleado tripulanteAsignado = tripulacionVueloService.asignarTripulanteAVuelo(asignacion);
         return ResponseEntity.status(201).body(tripulanteAsignado);
+    }
+
+    @PutMapping("/{idVuelo}/{idEmpleado}")
+    @Operation(summary = "Actualizar el puesto de un tripulante de un vuelo")
+    public ResponseEntity<TripulacionVuelo> updateTripulante(@PathVariable Long idVuelo, @PathVariable Long idEmpleado,
+                                                                @RequestBody TripulacionVuelo tripulacionVuelo) throws BadRequestException {
+        Objects.requireNonNull(tripulacionVuelo.getVuelo(), "La tripulacion del vuelo no tiene un vuelo asignado");
+        Objects.requireNonNull(tripulacionVuelo.getEmpleado(), "La tripulacion del vuelo no tiene un empleado asignado");
+        Objects.requireNonNull(tripulacionVuelo.getPuesto(), "La tripulacion del vuelo no tiene un puesto asignado");
+
+        if (!idVuelo.equals(tripulacionVuelo.getVuelo().getIdVuelo()) || !idEmpleado.equals(tripulacionVuelo.getEmpleado().getIdEmpleado())){
+            logger.warn("El vuelo o el empleado asignado a la tripulacion no coincide con su id en la URL");
+            return ResponseEntity.status(400).build();
+        }
+
+        logger.info("Actualizando tripulante {} del vuelo {}", idEmpleado, idVuelo);
+        TripulacionVuelo tripulacionVueloUpdated = tripulacionVueloService.updateTripulante(tripulacionVuelo);
+        return ResponseEntity.status(200).body(tripulacionVueloUpdated);
     }
 
     @DeleteMapping("/{idVuelo}/{idEmpleado}")
