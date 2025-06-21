@@ -66,7 +66,10 @@ public class TripulacionVueloService {
 
     public TripulacionVuelo updateTripulante(TripulacionVuelo tripulacionVuelo) {
         logger.info("Actualizando tripulante {} del vuelo {}", tripulacionVuelo.getEmpleado().getIdEmpleado(), tripulacionVuelo.getVuelo().getIdVuelo());
-        TripulacionVuelo tripulacionVueloUpdated = tripulacionVueloRepository.save(tripulacionVuelo);
+        TripulacionVuelo tripulacionVueloUpdated = tripulacionVueloRepository.findByVuelo_IdVueloAndEmpleado_IdEmpleado(tripulacionVuelo.getVuelo().getIdVuelo(), tripulacionVuelo.getEmpleado().getIdEmpleado());
+
+        tripulacionVueloUpdated.setPuesto(tripulacionVuelo.getPuesto());
+        tripulacionVueloUpdated = tripulacionVueloRepository.save(tripulacionVueloUpdated);
         return tripulacionVueloUpdated;
     }
 

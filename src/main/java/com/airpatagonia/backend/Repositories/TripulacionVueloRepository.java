@@ -19,4 +19,6 @@ public interface TripulacionVueloRepository extends JpaRepository<TripulacionVue
     void deleteAllByVuelo_IdVuelo(Long idVuelo);
 
     void deleteTripulacionVueloByVuelo_IdVueloAndEmpleado_IdEmpleado(Long idVuelo, Long idEmpleado);
+
+    TripulacionVuelo findByVuelo_IdVueloAndEmpleado_IdEmpleado(Long idVuelo, Long idEmpleado);
 }
