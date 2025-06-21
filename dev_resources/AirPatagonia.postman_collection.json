@@ -211,6 +211,54 @@
 			"name": "API-REST",
 			"item": [
 				{
+					"name": "Empleados",
+					"item": [
+						{
+							"name": "Empleados",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{API-localhost}}/empleados",
+									"host": [
+										"{{API-localhost}}"
+									],
+									"path": [
+										"empleados"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Empleados x Estado",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"idVuelo\": 11,\r\n    \"estado\": \"REPROGRAMADO\",\r\n    \"fechaPartida\": \"2025-07-14T02:05:35.983Z\",\r\n    \"fechaArribo\": \"2025-07-14T04:05:35.983Z\",\r\n    \"idAvion\": 2,\r\n    \"idAeropuertoPartida\": 2,\r\n    \"idAeropuertoArribo\": 4\r\n}"
+								},
+								"url": {
+									"raw": "{{API-localhost}}/empleados/estado/DISPONIBLE",
+									"host": [
+										"{{API-localhost}}"
+									],
+									"path": [
+										"empleados",
+										"estado",
+										"DISPONIBLE"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
 					"name": "Tripulantes",
 					"item": [
 						{
@@ -251,13 +299,37 @@
 							"response": []
 						},
 						{
+							"name": "Tripulantes para Asignar a Vuelo",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{API-localhost}}/tripulacion-vuelo/?idVuelo=2",
+									"host": [
+										"{{API-localhost}}"
+									],
+									"path": [
+										"tripulacion-vuelo",
+										""
+									],
+									"query": [
+										{
+											"key": "idVuelo",
+											"value": "2"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
 							"name": "Asignar Tripulante",
 							"request": {
 								"method": "POST",
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n  \"vuelo\": {\r\n    \"idVuelo\": 2\r\n  },\r\n  \"empleado\": {\r\n    \"idEmpleado\": 3\r\n  },\r\n  \"puesto\": {\r\n    \"idPuestoTripulante\": 3\r\n  }\r\n}",
+									"raw": "{\r\n  \"vuelo\": {\r\n    \"idVuelo\": 35\r\n  },\r\n  \"empleado\": {\r\n    \"idEmpleado\": 4\r\n  },\r\n  \"puesto\": {\r\n    \"idPuestoTripulante\": 3\r\n  }\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -279,92 +351,310 @@
 					]
 				},
 				{
-					"name": "Vuelos Estados",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{API-localhost}}/vuelos/estados",
-							"host": [
-								"{{API-localhost}}"
-							],
-							"path": [
-								"vuelos",
-								"estados"
-							]
+					"name": "Vuelos",
+					"item": [
+						{
+							"name": "New Vuelo Completo",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"vuelo\": {\r\n    \"estado\": \"PROGRAMADO\",\r\n    \"fechaPartida\": \"2025-06-13T02:05:35.983Z\",\r\n    \"fechaArribo\": \"2025-06-13T02:05:35.983Z\",\r\n    \"avion\": {\r\n      \"idAvion\": 0,\r\n      \"fabricante\": \"string\",\r\n      \"modelo\": \"string\",\r\n      \"capacidadTurista\": 0,\r\n      \"capacidadBusiness\": 0,\r\n      \"capacidadPrimeraClase\": 0,\r\n      \"autonomia\": 0.1,\r\n      \"matricula\": \"string\",\r\n      \"estado\": \"Baja\"\r\n    },\r\n    \"origen\": {\r\n      \"idAeropuerto\": 0,\r\n      \"codigoIATA\": \"string\",\r\n      \"ciudad\": \"string\",\r\n      \"nombreAeropuerto\": \"string\",\r\n      \"nombreCorto\": \"string\",\r\n      \"pais\": \"string\",\r\n      \"estado\": \"Operativo\"\r\n    },\r\n    \"destino\": {\r\n      \"idAeropuerto\": 0,\r\n      \"codigoIATA\": \"string\",\r\n      \"ciudad\": \"string\",\r\n      \"nombreAeropuerto\": \"string\",\r\n      \"nombreCorto\": \"string\",\r\n      \"pais\": \"string\",\r\n      \"estado\": \"Operativo\"\r\n    },\r\n    \"tripulantes\": [\r\n      {\r\n        \"nombre\": \"string\",\r\n        \"apellido\": \"string\",\r\n        \"email\": \"string\",\r\n        \"tipoDocumento\": \"string\",\r\n        \"nroDocumento\": \"string\",\r\n        \"ciudad\": {\r\n          \"idCiudad\": 0,\r\n          \"nombre\": \"string\",\r\n          \"pais\": {\r\n            \"idPais\": 0,\r\n            \"nombre\": \"string\"\r\n          }\r\n        },\r\n        \"direccion\": \"string\",\r\n        \"telefono\": \"string\",\r\n        \"fechaNacimiento\": \"2025-06-13T02:05:35.984Z\",\r\n        \"idEmpleado\": 0,\r\n        \"estadoEmpleado\": \"DISPONIBLE\",\r\n        \"legajo\": \"string\"\r\n      }\r\n    ],\r\n    \"pasajeros\": [\r\n      {\r\n        \"idPasajero\": 0,\r\n        \"detallePasaje\": {\r\n          \"id\": 0,\r\n          \"estadoPasaje\": \"Vigente\",\r\n          \"categoria\": \"Turista\",\r\n          \"asiento\": \"string\",\r\n          \"fechaOperacion\": \"2025-06-13T02:05:35.984Z\",\r\n          \"precio\": 0,\r\n          \"medioDePago\": {\r\n            \"idPago\": 0,\r\n            \"fechaOperacion\": \"2025-06-13T02:05:35.984Z\",\r\n            \"monto\": 0,\r\n            \"sucursalCobro\": \"string\",\r\n            \"puestoCobro\": \"string\",\r\n            \"numeroTarjeta\": \"string\",\r\n            \"titularTarjeta\": \"string\",\r\n            \"entidadEmisoraTarjeta\": \"string\",\r\n            \"bancoOrigen\": \"string\",\r\n            \"cbuOrigen\": \"string\",\r\n            \"numeroOperacion\": \"string\"\r\n          },\r\n          \"estadoPago\": \"Pendiente\"\r\n        },\r\n        \"tipoPasajero\": \"string\"\r\n      }\r\n    ]\r\n  },\r\n  \"empleado\": {\r\n    \"nombre\": \"string\",\r\n    \"apellido\": \"string\",\r\n    \"email\": \"string\",\r\n    \"tipoDocumento\": \"string\",\r\n    \"nroDocumento\": \"string\",\r\n    \"ciudad\": {\r\n      \"idCiudad\": 0,\r\n      \"nombre\": \"string\",\r\n      \"pais\": {\r\n        \"idPais\": 0,\r\n        \"nombre\": \"string\"\r\n      }\r\n    },\r\n    \"direccion\": \"string\",\r\n    \"telefono\": \"string\",\r\n    \"fechaNacimiento\": \"2025-06-13T02:05:35.984Z\",\r\n    \"idEmpleado\": 0,\r\n    \"estadoEmpleado\": \"DISPONIBLE\",\r\n    \"legajo\": \"string\"\r\n  },\r\n  \"puesto\": {\r\n    \"idPuestoTripulante\": 0,\r\n    \"puesto\": \"string\",\r\n    \"descripcion\": \"string\"\r\n  }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{API-localhost}}/vuelos",
+									"host": [
+										"{{API-localhost}}"
+									],
+									"path": [
+										"vuelos"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "New Vuelo DTO",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    // \"idVuelo\": 10,\r\n    // \"estado\": \"PROGRAMADO\",\r\n    \"fechaPartida\": \"2025-07-13T02:05:35.983Z\",\r\n    \"fechaArribo\": \"2025-07-13T04:05:35.983Z\",\r\n    \"idAvion\": 2,\r\n    \"idAeropuertoPartida\": 1,\r\n    \"idAeropuertoArribo\": 4\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{API-localhost}}/vuelos",
+									"host": [
+										"{{API-localhost}}"
+									],
+									"path": [
+										"vuelos"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Vuelos",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{API-localhost}}/vuelos",
+									"host": [
+										"{{API-localhost}}"
+									],
+									"path": [
+										"vuelos"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Vuelo x ID",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{API-localhost}}/vuelos/11",
+									"host": [
+										"{{API-localhost}}"
+									],
+									"path": [
+										"vuelos",
+										"11"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Vuelo x ESTADO",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{API-localhost}}/vuelos/estado/PROGRAMADO",
+									"host": [
+										"{{API-localhost}}"
+									],
+									"path": [
+										"vuelos",
+										"estado",
+										"PROGRAMADO"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Vuelos Estados",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{API-localhost}}/vuelos/estados",
+									"host": [
+										"{{API-localhost}}"
+									],
+									"path": [
+										"vuelos",
+										"estados"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update VueloDTO",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"estado\": \"REPROGRAMADO\",\r\n    \"fechaPartida\": \"2025-06-17T06:08:51\",\r\n    \"fechaArribo\": \"2025-06-17T14:08:51\",\r\n    \"idAvion\": 19,\r\n    \"idAeropuertoPartida\": 46,\r\n    \"idAeropuertoArribo\": 21\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{API-localhost}}/vuelos/35",
+									"host": [
+										"{{API-localhost}}"
+									],
+									"path": [
+										"vuelos",
+										"35"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "New Request",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"estado\": \"REPROGRAMADO\",\r\n    \"fechaPartida\": \"2025-06-17T06:08:51\",\r\n    \"fechaArribo\": \"2025-06-17T14:08:51\",\r\n    \"idAvion\": 19,\r\n    \"idAeropuertoPartida\": 46,\r\n    \"idAeropuertoArribo\": 21\r\n}"
+								},
+								"url": {
+									"raw": "{{API-localhost}}/vuelos/35",
+									"host": [
+										"{{API-localhost}}"
+									],
+									"path": [
+										"vuelos",
+										"35"
+									]
+								}
+							},
+							"response": []
 						}
-					},
-					"response": []
+					]
 				},
 				{
-					"name": "Aviones",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{API-localhost}}/aviones",
-							"host": [
-								"{{API-localhost}}"
-							],
-							"path": [
-								"aviones"
-							]
+					"name": "Uso General",
+					"item": [
+						{
+							"name": "Aviones",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{API-localhost}}/aviones",
+									"host": [
+										"{{API-localhost}}"
+									],
+									"path": [
+										"aviones"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Pagos Pasajes",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{API-localhost}}/vuelos/pagos-pasajes",
+									"host": [
+										"{{API-localhost}}"
+									],
+									"path": [
+										"vuelos",
+										"pagos-pasajes"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Aeropuertos",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{API-localhost}}/aeropuertos",
+									"host": [
+										"{{API-localhost}}"
+									],
+									"path": [
+										"aeropuertos"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Detalle Pasajes",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{API-localhost}}/vuelos/detalle-pasajes",
+									"host": [
+										"{{API-localhost}}"
+									],
+									"path": [
+										"vuelos",
+										"detalle-pasajes"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Paises",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{API-localhost}}/info-general/paises",
+									"host": [
+										"{{API-localhost}}"
+									],
+									"path": [
+										"info-general",
+										"paises"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Ciudades",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{API-localhost}}/info-general/ciudades",
+									"host": [
+										"{{API-localhost}}"
+									],
+									"path": [
+										"info-general",
+										"ciudades"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Clientes",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{API-localhost}}/clientes",
+									"host": [
+										"{{API-localhost}}"
+									],
+									"path": [
+										"clientes"
+									]
+								}
+							},
+							"response": []
 						}
-					},
-					"response": []
-				},
-				{
-					"name": "Aeropuertos",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{API-localhost}}/aeropuertos",
-							"host": [
-								"{{API-localhost}}"
-							],
-							"path": [
-								"aeropuertos"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Pagos Pasajes",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{API-localhost}}/vuelos/pagos-pasajes",
-							"host": [
-								"{{API-localhost}}"
-							],
-							"path": [
-								"vuelos",
-								"pagos-pasajes"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Detalle Pasajes",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{API-localhost}}/vuelos/detalle-pasajes",
-							"host": [
-								"{{API-localhost}}"
-							],
-							"path": [
-								"vuelos",
-								"detalle-pasajes"
-							]
-						}
-					},
-					"response": []
+					]
 				},
 				{
 					"name": "Status",
@@ -379,129 +669,6 @@
 							"path": [
 								"info-general",
 								"status"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Paises",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{API-localhost}}/info-general/paises",
-							"host": [
-								"{{API-localhost}}"
-							],
-							"path": [
-								"info-general",
-								"paises"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Ciudades",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{API-localhost}}/info-general/ciudades",
-							"host": [
-								"{{API-localhost}}"
-							],
-							"path": [
-								"info-general",
-								"ciudades"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Empleados",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{API-localhost}}/empleados",
-							"host": [
-								"{{API-localhost}}"
-							],
-							"path": [
-								"empleados"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Clientes",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{API-localhost}}/clientes",
-							"host": [
-								"{{API-localhost}}"
-							],
-							"path": [
-								"clientes"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Vuelos",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{API-localhost}}/vuelos",
-							"host": [
-								"{{API-localhost}}"
-							],
-							"path": [
-								"vuelos"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Vuelo x ID",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{API-localhost}}/vuelos/10",
-							"host": [
-								"{{API-localhost}}"
-							],
-							"path": [
-								"vuelos",
-								"10"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Vuelo x ESTADO",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{API-localhost}}/vuelos/PROGRAMADO",
-							"host": [
-								"{{API-localhost}}"
-							],
-							"path": [
-								"vuelos",
-								"PROGRAMADO"
 							]
 						}
 					},
